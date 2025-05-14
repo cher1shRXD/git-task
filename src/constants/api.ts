@@ -1,2 +1,2 @@
-const IP = "localhost:8080";
-export const API_URL = `https://${IP}`;
+const IP = "localhost:3000";
+export const API_URL = `http://${IP}`;
