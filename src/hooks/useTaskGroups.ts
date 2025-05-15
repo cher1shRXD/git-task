@@ -1,0 +1,83 @@
+import { useState } from "react";
+import { TaskGroup } from "@/types/chart/TaskGroup";
+import { Task } from "@/types/chart/Task";
+
+const emptyTask: Task = {
+  taskName: "",
+  startDate: "",
+  endDate: "",
+  connectedBranch: "",
+  worker: "",
+};
+
+export const useTaskGroups = (initialData: TaskGroup[]) => {
+  const [taskGroups, setTaskGroups] = useState<TaskGroup[]>(initialData);
+  const [selectedGroup, setSelectedGroup] = useState<string>(
+    initialData[0]?.taskGroupName || ""
+  );
+  const [form, setForm] = useState<Task>(emptyTask);
+  const [editIndex, setEditIndex] = useState<number | null>(null);
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setForm({ ...form, [e.target.name]: e.target.value });
+  };
+
+  const handleAddOrUpdate = () => {
+    if (!form.taskName || !form.startDate || !form.endDate) return;
+    setTaskGroups((prev) =>
+      prev.map((group) => {
+        if (group.taskGroupName !== selectedGroup) return group;
+        const updatedTasks =
+          editIndex !== null
+            ? group.tasks.map((t, i) => (i === editIndex ? form : t))
+            : [...group.tasks, form];
+        return { ...group, tasks: updatedTasks };
+      })
+    );
+    setForm(emptyTask);
+    setEditIndex(null);
+  };
+
+  const handleDeleteTask = (groupName: string, index: number) => {
+    setTaskGroups((prev) =>
+      prev.map((group) =>
+        group.taskGroupName === groupName
+          ? { ...group, tasks: group.tasks.filter((_, i) => i !== index) }
+          : group
+      )
+    );
+    if (selectedGroup === groupName && editIndex === index) {
+      setForm(emptyTask);
+      setEditIndex(null);
+    }
+  };
+
+  const handleEditTask = (groupName: string, index: number) => {
+    const group = taskGroups.find((g) => g.taskGroupName === groupName);
+    if (!group) return;
+    setSelectedGroup(groupName);
+    setForm(group.tasks[index]);
+    setEditIndex(index);
+  };
+
+  const handleAddGroup = (groupName: string) => {
+    if (!groupName.trim()) return;
+    if (taskGroups.find((g) => g.taskGroupName === groupName)) return;
+    setTaskGroups([...taskGroups, { taskGroupName: groupName, tasks: [] }]);
+    setSelectedGroup(groupName);
+  };
+
+  return {
+    taskGroups,
+    selectedGroup,
+    form,
+    editIndex,
+    setSelectedGroup,
+    setForm,
+    handleChange,
+    handleAddOrUpdate,
+    handleDeleteTask,
+    handleEditTask,
+    handleAddGroup,
+  };
+};

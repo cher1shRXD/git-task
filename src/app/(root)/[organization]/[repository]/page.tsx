@@ -1,3 +1,4 @@
+import ChartController from "@/components/chart/ChartController";
 import { fetchGitHubRepoDetail } from "@/services/fetchRepoDetail";
 import { getRepoLanguageColor } from "@/services/getRepoLanguageColor";
 import { parseDate } from "@/utilities/parseDate";
@@ -28,10 +29,10 @@ const RepositoryPage = async ({
       </div>
       <div className="w-full flex items-start">
         <div className="w-[calc(100%-400px)]">
-
+          <ChartController />
         </div>
         <div className="w-100 flex flex-col gap-4">
-          <div className="w-full flex flex-col gap-2 items-start border border-gray-300 rounded-lg p-4 font-jetbrains">
+          <div className="w-full flex flex-col gap-2 items-start border border-gray-300 p-4 font-jetbrains">
             <p className="text-lg text-primary">Repository Info</p>
             <p className={`w-full py-2 border-b mb-4 border-gray-300 ${repo?.description ? "" : "text-gray-400"}`}>{repo?.description || "No Descriptions..."}</p>
             { repo?.language && (
@@ -49,7 +50,7 @@ const RepositoryPage = async ({
             <p>Created At: {repo && parseDate(repo?.createdAt)}</p>
             <p>Modified At: {repo && parseDate(repo?.updatedAt)}</p>
           </div>
-          <div className="w-full flex flex-col gap-2 items-start border border-gray-300 rounded-lg p-4 font-jetbrains">
+          <div className="w-full flex flex-col gap-2 items-start border border-gray-300 p-4 font-jetbrains">
             <p className="text-lg text-primary">Web Hooks</p>
             <div className="w-full rounded-lg overflow-hidden">
               <p className="p-1 px-2 text-sm text-gray-500 bg-gray-100 border border-gray-300 border-b-0 overflow-hidden rounded-t-lg">code</p>

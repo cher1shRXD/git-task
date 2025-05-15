@@ -1,0 +1,1 @@
+export const getDateDiff = (start: Date, end: Date) => (end.getTime() - start.getTime()) / (1000 * 60 * 60 * 24);
