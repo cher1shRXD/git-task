@@ -2,20 +2,21 @@
 
 import { GitHubOrgWithRepos } from "@/types/github/GitHubOrgWithRepos";
 import { ChevronDown, Minus } from "lucide-react";
-import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 
 const OrganizationItem = ({ data }: { data: GitHubOrgWithRepos }) => {
-  const [isOpened, setIsOpened] = useState(true);
+  const [isOpened, setIsOpened] = useState(false);
   const router = useRouter();
 
   return (
     <div className="w-full flex flex-col items-start">
-      <div className="w-full flex items-center justify-between">
-        <Link href={`/${data.login}`} className="text-lg font-medium hover:text-blue-600 transition-colors">{data.login}</Link>
+      <div className="w-full flex items-center justify-between hover:text-blue-600 cursor-pointer" onClick={() => router.push(`/${data.login}`)}>
+        <p className="text-lg font-medium transition-colors">{data.login}</p>
         {
-          isOpened ? <Minus onClick={() => setIsOpened(false)} className="cursor-pointer" /> : <ChevronDown onClick={() => setIsOpened(true)} className="cursor-pointer" />
+          isOpened ? 
+            <Minus onClick={(e) => {e.stopPropagation(); setIsOpened(false)}} className="cursor-pointer text-black" /> : 
+            <ChevronDown onClick={(e) => {e.stopPropagation(); setIsOpened(true)}} className="cursor-pointer text-black" />
         }
       </div>
       {

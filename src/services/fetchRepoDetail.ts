@@ -1,5 +1,4 @@
 import { GitHubBranch } from "@/types/github/GitHubBranch";
-import { GitHubRepo } from "@/types/github/GitHubRepo";
 import { RepoDetail } from "@/types/github/RepoDetail";
 import { parseLastPageFromLinkHeader } from "@/utilities/parseLastPageFromLinkHeader";
 import axios from "axios";
@@ -10,7 +9,7 @@ export async function fetchGitHubRepoDetail(accessToken: string, owner: string, 
     Accept: "application/vnd.github+json",
   };
 
-  const { data: repoData } = await axios.get<GitHubRepo>(
+  const { data: repoData } = await axios.get(
     `https://api.github.com/repos/${owner}/${repo}`,
     { headers }
   );
@@ -34,7 +33,23 @@ export async function fetchGitHubRepoDetail(accessToken: string, owner: string, 
   const commitCount = parseLastPageFromLinkHeader(commitsRes.headers.link);
 
   return {
-    ...repoData,
+    id: repoData.id,
+    name: repoData.name,
+    fullName: repoData.full_name,
+    private: repoData.private,
+    createdAt: repoData.created_at,
+    defaultBranch: repoData.default_branch,
+    description: repoData.description,
+    forksCount: repoData.forks_count,
+    language: repoData.language,
+    stargazersCount: repoData.stargazers_count,
+    updatedAt: repoData.updated_at,
+    htmlUrl: repoData.html_url,
+    owner: {
+      login: repoData.owner.login,
+      id: repoData.owner.id,
+      avatarUrl: repoData.owner.avatar_url
+    },
     branches: branchesData.map((branch) => ({
       name: branch.name,
       protected: branch.protected,

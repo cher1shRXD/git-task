@@ -10,7 +10,7 @@ const Sidebar = async () => {
   if(!hasSession) {
     return (
       <div className="w-100 h-full p-3">
-        <div className="h-25 flex items-center pl-2">
+        <div className="h-25 flex items-center pl-4">
           <Image src="/imags/SymbolWithText.svg" alt="logo" width={848} height={291} className="w-40" />
         </div>
         <p className="text-lg font-semibold text-primary font-jetbrains">Organizations</p>
@@ -23,7 +23,7 @@ const Sidebar = async () => {
 
   return (
     <div className="w-100 h-full p-3 pb-0 flex flex-col gap-4">
-      <div className="h-25 flex items-center pl-2">
+      <div className="h-25 flex items-center pl-4">
         <Image src="/imags/SymbolWithText.svg" alt="logo" width={848} height={291} className="w-40" />
       </div>
     
