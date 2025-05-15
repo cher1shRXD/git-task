@@ -1,4 +1,4 @@
-import { authOptions } from "@/libs/auth";
+import { authOptions } from "@/libs/next-auth/auth";
 import { fetchOrgsWithRepos } from "@/services/fetchOrgsWithRepos";
 import { getServerSession } from "next-auth";
 import { NextResponse } from "next/server";

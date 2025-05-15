@@ -34,11 +34,11 @@ const RootLayout = ({
           <QueryProvider>
             <AuthSessionProvider>
               <CookiesProvider>
-                <div className="w-full h-screen bg-bg">
-                  <Header />
-                  <div className="w-full h-[calc(100%-100px)] flex items-start justify-center">
-                    <Sidebar />
-                    <div className="w-[calc(100%-400px)] h-full bg-white rounded-tl-4xl shadow-2xl border-l border-t border-gray-300">
+                <div className="w-full h-screen bg-gradient-to-br from-blue-50 to-purple-300 flex">
+                  <Sidebar />
+                  <div className="w-[calc(100%-400px)] h-full flex flex-col items-start justify-center">
+                    <Header />
+                    <div className="w-full h-[calc(100%-100px)] bg-white rounded-tl-4xl shadow-2xl overflow-scroll">
                       {children}
                     </div>
                   </div>
