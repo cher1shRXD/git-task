@@ -1,9 +1,10 @@
+import { Task } from "../chart/Task";
 import { TaskGroup } from "../chart/TaskGroup";
 import { GitHubBranch } from "../github/GitHubBranch";
 
 export interface TaskFormProps {
   selectedGroup: string;
-  form: any;
+  form: Task;
   handleChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
   handleAddOrUpdate: () => void;
   handleAddGroup: (name: string) => void;

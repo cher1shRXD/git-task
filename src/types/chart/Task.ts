@@ -4,4 +4,5 @@ export interface Task {
   endDate: string;
   connectedBranch: string;
   worker: string;
+  isDone: boolean;
 }

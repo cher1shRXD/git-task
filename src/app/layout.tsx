@@ -4,11 +4,11 @@ import './tailwind.css';
 import {ReactNode} from "react";
 import localFont from "next/font/local";
 import {CookiesProvider} from "next-client-cookies/server";
-import ProgressProvider from "@/components/providers/ProgressProvider";
-import QueryProvider from "@/components/providers/QueryProvider";
+import QueryProvider from "@/components/provider/QueryProvider";
 import Header from "@/components/common/Header";
 import Sidebar from "@/components/common/Sidebar";
-import AuthSessionProvider from "@/components/providers/SessionProvider";
+import AuthSessionProvider from "@/components/provider/SessionProvider";
+import ToastContainer from "@/components/provider/ToastProvider";
 
 export const metadata: Metadata = {
   title: "Git-TASK",
@@ -30,23 +30,22 @@ const RootLayout = ({
   return (
     <html lang="ko">
       <body className={pretendard.variable}>
-        <ProgressProvider>
-          <QueryProvider>
-            <AuthSessionProvider>
-              <CookiesProvider>
-                <div className="w-full h-screen bg-gradient-to-br from-blue-50 to-purple-300 flex">
-                  <Sidebar />
-                  <div className="w-[calc(100%-400px)] h-full flex flex-col items-start justify-center">
-                    <Header />
-                    <div className="w-full h-[calc(100%-100px)] bg-white rounded-tl-4xl shadow-2xl overflow-scroll">
-                      {children}
-                    </div>
+        <ToastContainer />
+        <QueryProvider>
+          <AuthSessionProvider>
+            <CookiesProvider>
+              <div className="w-full h-screen bg-gradient-to-br from-blue-50 to-purple-300 flex">
+                <Sidebar />
+                <div className="w-[calc(100%-400px)] h-full flex flex-col items-start justify-center">
+                  <Header />
+                  <div className="w-full h-[calc(100%-100px)] bg-white rounded-tl-4xl shadow-2xl overflow-scroll">
+                    {children}
                   </div>
                 </div>
-              </CookiesProvider>
-            </AuthSessionProvider>
-          </QueryProvider>
-        </ProgressProvider>
+              </div>
+            </CookiesProvider>
+          </AuthSessionProvider>
+        </QueryProvider>
       </body>
     </html>
   );

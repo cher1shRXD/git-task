@@ -1,7 +1,9 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { TaskGroup } from "@/types/chart/TaskGroup";
 import { Task } from "@/types/chart/Task";
 import { GitHubBranch } from "@/types/github/GitHubBranch";
+import { useCreateBranch } from "./useCreateBranch";
+import { toast } from "@/components/provider/ToastProvider";
 
 const emptyTask: Task = {
   taskName: "",
@@ -9,9 +11,10 @@ const emptyTask: Task = {
   endDate: "",
   connectedBranch: "",
   worker: "",
+  isDone: false
 };
 
-export const useTaskGroups = (initialData: TaskGroup[], branches: GitHubBranch[]) => {
+export const useTaskGroups = (initialData: TaskGroup[], branches: GitHubBranch[], defaultBranch?: string, repoName?: string, ownerName?: string) => {
   const [taskGroups, setTaskGroups] = useState<TaskGroup[]>(initialData);
   const [selectedGroup, setSelectedGroup] = useState<string>(
     initialData[0]?.taskGroupName || ""
@@ -20,6 +23,7 @@ export const useTaskGroups = (initialData: TaskGroup[], branches: GitHubBranch[]
   const [editIndex, setEditIndex] = useState<number | null>(null);
   const [branchList, setBranchList] = useState(branches);
   const [selectedBranch, setSelectedBranch] = useState(branches[0].name);
+  const createBranch = useCreateBranch();
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setForm({ ...form, [e.target.name]: e.target.value, connectedBranch: selectedBranch });
@@ -70,8 +74,17 @@ export const useTaskGroups = (initialData: TaskGroup[], branches: GitHubBranch[]
     setSelectedGroup(groupName);
   };
 
-  const addNewBranch = (name: string) => {
-    setBranchList(prev => ([...prev, { name, protected: false }]))
+  const addNewBranch = async (name: string) => {
+    if(!defaultBranch || !repoName || !ownerName) return;
+    try{
+      const data = await createBranch(ownerName, repoName, defaultBranch, name);
+      if(data.success) {
+        setBranchList(prev => ([...prev, { name, protected: false }]));
+        toast.success("브랜치 생성 성공");
+      }
+    }catch{
+      toast.error("브랜치 생성 실패");
+    }
   }
 
   const deleteTaskGroup = (taskGroupName: string) => {
@@ -82,7 +95,6 @@ export const useTaskGroups = (initialData: TaskGroup[], branches: GitHubBranch[]
     taskGroups,
     selectedGroup,
     form,
-    editIndex,
     setSelectedGroup,
     setForm,
     handleChange,

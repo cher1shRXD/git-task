@@ -66,14 +66,14 @@ const GanttChart = ({ taskGroups, onEdit, onDelete }: GanttChartProps) => {
                     <td key={i} className="border border-gray-300 relative p-0">
                       {i === offset && (
                         <div
-                          className="absolute top-2 left-2 h-6 bg-gradient-to-br from-blue-500 to-purple-500 rounded text-white text-xs px-2 flex items-center gap-1"
+                          className={`absolute top-2 left-2 h-6 ${task.isDone ? "bg-gradient-to-br from-blue-500 to-purple-500" : "bg-gray-400"} rounded text-white text-xs px-2 flex items-center gap-1`}
                           style={{
                             width: `${span * cellWidth - 16}px`,
                             zIndex: 1,
                           }}
                           title={`${task.taskName} (${task.startDate} ~ ${task.endDate})`}
                         >
-                          <p>{task.taskName}</p>
+                          <p className="whitespace-nowrap overflow-hidden text-ellipsis">{task.taskName}</p>
                           <div className="flex-1" />
                           <Edit onClick={() => onEdit(group.taskGroupName, tIdx)} size={14} className="cursor-pointer" />
                           <Trash onClick={() => onDelete(group.taskGroupName, tIdx)} size={14} className="cursor-pointer" />

@@ -11,3 +11,23 @@
     display: none;
   }
 }
+
+@keyframes toast-animation {
+  0% {
+    opacity: 0;
+  }
+  5% {
+    opacity: 1;
+  }
+  95% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+  }
+}
+
+.toast {
+  opacity: 0;
+  animation: toast-animation 3s forwards;
+}

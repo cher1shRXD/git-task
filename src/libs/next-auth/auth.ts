@@ -1,5 +1,6 @@
 import GitHub from "next-auth/providers/github";
 import type { NextAuthOptions } from "next-auth";
+import { SessionWithToken } from "@/types/session/SessionWithToken";
 
 export const authOptions: NextAuthOptions = {
   providers: [
@@ -22,7 +23,7 @@ export const authOptions: NextAuthOptions = {
       return token;
     },
     async session({ session, token }) {
-      (session as any).accessToken = token.accessToken;
+      (session as SessionWithToken).accessToken = token.accessToken as string;
       return session;
     },
   },

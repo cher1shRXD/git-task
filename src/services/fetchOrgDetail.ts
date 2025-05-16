@@ -1,4 +1,4 @@
-import axios from "axios";
+import axios, { AxiosError } from "axios";
 import { GitHubRepo } from "@/types/github/GitHubRepo";
 import { GitHubOrgWithRepos } from "@/types/github/GitHubOrgWithRepos";
 
@@ -54,8 +54,8 @@ export const fetchOrgDetail = async (
         },
       })),
     };
-  } catch (err: any) {
-    console.error(`Error fetching org or repos for ${orgLogin}:`, err.message);
+  } catch (err: unknown) {
+    console.error(`Error fetching org or repos for ${orgLogin}:`, (err as AxiosError).message);
     return {
       id: -1,
       login: orgLogin,
@@ -63,7 +63,7 @@ export const fetchOrgDetail = async (
       avatarUrl: "",
       description: "",
       repos: [],
-      error: `Failed to fetch organization or repositories: ${err.message}`,
+      error: `Failed to fetch organization or repositories: ${(err as AxiosError).message}`,
     };
   }
 };

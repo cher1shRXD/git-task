@@ -1,17 +1,13 @@
 import { authOptions } from "@/libs/next-auth/auth";
+import { SessionWithToken } from "@/types/session/SessionWithToken";
 import { getServerSession } from "next-auth";
 
-type CallbackSingle<T> = (accessToken: string) => Promise<T>;
-type CallbackWithOrg<T> = (accessToken: string, orgLogin: string) => Promise<T>;
-type CallbackWithRepo<T> = (accessToken: string, orgLogin: string, repoName: string) => Promise<T>;
-
 export async function requestWithSession<T>(
-  callback: CallbackSingle<T> | CallbackWithOrg<T> | CallbackWithRepo<T>,
-  orgLogin?: string,
-  repoName?: string,
+  callback: (accessToken: string, ...args: string[]) => Promise<T>,
+  ...args: string[]
 ): Promise<{ hasSession: boolean; data: T | null }> {
   const session = await getServerSession(authOptions);
-  const accessToken = (session as any)?.accessToken;
+  const accessToken = (session as SessionWithToken)?.accessToken;
 
   if (!accessToken) {
     return {
@@ -20,10 +16,7 @@ export async function requestWithSession<T>(
     };
   }
 
-  const data = repoName && orgLogin
-    ? await (callback as CallbackWithRepo<T>)(accessToken, orgLogin, repoName)
-    : orgLogin ? await (callback as CallbackWithOrg<T>)(accessToken, orgLogin)
-    : await (callback as CallbackSingle<T>)(accessToken);
+  const data = await callback(accessToken, ...args);
 
   return {
     hasSession: true,

@@ -6,7 +6,7 @@ import TaskForm from "./TaskForm";
 import TaskList from "./TaskList";
 import { ChartControllerProps } from "@/types/props/ChartControllerProps";
 
-const ChartController = ({ branches }: ChartControllerProps) => {
+const ChartController = ({ branches, defaultBranch, ownerName, repoName }: ChartControllerProps) => {
   const {
     taskGroups,
     selectedGroup,
@@ -23,11 +23,10 @@ const ChartController = ({ branches }: ChartControllerProps) => {
     addNewBranch,
     deleteTaskGroup,
     isEditing
-  } = useTaskGroups([], branches);
+  } = useTaskGroups([], branches, defaultBranch, repoName, ownerName);
 
   return (
     <div className="w-full">
-
       <p className="mb-2 mt-8 text-xl font-jetbrains">작업 추가하기</p>
       <TaskForm
         selectedGroup={selectedGroup}
