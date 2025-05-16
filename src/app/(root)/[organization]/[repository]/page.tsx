@@ -20,19 +20,19 @@ const RepositoryPage = async ({
   const langColor = await getRepoLanguageColor(repo?.language || null);
 
   return (
-    <div className="w-full p-8 flex flex-col gap-16">
-      <div className="w-full flex flex-col gap-2">
+    <div className="w-full p-2 xl:p-8 flex flex-col gap-3 xl:gap-16">
+      <div className="w-full pt-8 xl:pt-0 flex flex-col gap-2">
         <div className="w-full flex items-center gap-2">
           <p className="text-3xl font-jetbrains">{repo?.name}</p>
           <span className="border border-blue-300 rounded-full px-2 bg-blue-50 text-gray-500 text-sm">{repo?.private ? "private" : "public"}</span>
         </div>
       </div>
-      <div className="w-full flex items-start">
-        <div className="w-[calc(100%-400px)]">
-          <ChartController />
+      <div className="w-full flex gap-16 flex-col xl:flex-row xl:gap-0 items-start">
+        <div className="w-full xl:w-[calc(100%-400px)]">
+          <ChartController branches={repo?.branches || []} />
         </div>
-        <div className="w-100 flex flex-col gap-4">
-          <div className="w-full flex flex-col gap-2 items-start border border-gray-300 p-4 font-jetbrains">
+        <div className="w-full xl:w-100 flex flex-col gap-4">
+          <div className="w-full flex flex-col gap-2 items-start border border-gray-300 p-4 font-jetbrains bg-white">
             <p className="text-lg text-primary">Repository Info</p>
             <p className={`w-full py-2 border-b mb-4 border-gray-300 ${repo?.description ? "" : "text-gray-400"}`}>{repo?.description || "No Descriptions..."}</p>
             { repo?.language && (
@@ -50,7 +50,7 @@ const RepositoryPage = async ({
             <p>Created At: {repo && parseDate(repo?.createdAt)}</p>
             <p>Modified At: {repo && parseDate(repo?.updatedAt)}</p>
           </div>
-          <div className="w-full flex flex-col gap-2 items-start border border-gray-300 p-4 font-jetbrains">
+          <div className="w-full flex flex-col gap-2 items-start border border-gray-300 p-4 font-jetbrains bg-white">
             <p className="text-lg text-primary">Web Hooks</p>
             <div className="w-full rounded-lg overflow-hidden">
               <p className="p-1 px-2 text-sm text-gray-500 bg-gray-100 border border-gray-300 border-b-0 overflow-hidden rounded-t-lg">code</p>

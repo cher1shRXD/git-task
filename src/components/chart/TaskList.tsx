@@ -2,23 +2,18 @@ import { TaskListProps } from "@/types/props/TaskListProps";
 
 const TaskList = ({
   taskGroups,
-  onEdit,
-  onDelete,
-  onSelectGroup,
-  selectedGroup,
 }: TaskListProps) => {
   return (
-    <div className="overflow-x-auto">
-      <table className="table-auto w-full border-collapse border">
+    <div className="overflow-x-auto mr-4 mb-4">
+      <table className="table-auto w-full max-w-250 border-collapse border border-gray-300">
         <thead>
-          <tr>
-            <th className="border p-2">그룹</th>
-            <th className="border p-2">작업명</th>
-            <th className="border p-2">시작일</th>
-            <th className="border p-2">종료일</th>
-            <th className="border p-2">브랜치</th>
-            <th className="border p-2">작업자</th>
-            <th className="border p-2">작업</th>
+          <tr className="font-jetbrains">
+            <th className="border border-gray-300 p-2">그룹</th>
+            <th className="border border-gray-300 p-2">작업명</th>
+            <th className="border border-gray-300 p-2">시작일</th>
+            <th className="border border-gray-300 p-2">종료일</th>
+            <th className="border border-gray-300 p-2">브랜치</th>
+            <th className="border border-gray-300 p-2">담당자</th>
           </tr>
         </thead>
         <tbody>
@@ -28,33 +23,33 @@ const TaskList = ({
                 {idx === 0 && (
                   <td
                     rowSpan={group.tasks.length}
-                    className="border p-2 align-top bg-gray-100"
-                    onClick={() => onSelectGroup(group.taskGroupName)}
+                    className="border border-gray-300 p-2 align-center bg-gray-100"
                     style={{ cursor: "pointer" }}
                   >
                     {group.taskGroupName}
-                    {selectedGroup === group.taskGroupName && " ✅"}
                   </td>
                 )}
-                <td className="border p-2">{task.taskName}</td>
-                <td className="border p-2">{task.startDate}</td>
-                <td className="border p-2">{task.endDate}</td>
-                <td className="border p-2">{task.connectedBranch}</td>
-                <td className="border p-2">{task.worker}</td>
-                <td className="border p-2">
-                  <button
-                    onClick={() => onEdit(group.taskGroupName, idx)}
-                    className="text-blue-500 mr-2"
-                  >
-                    수정
-                  </button>
-                  <button
-                    onClick={() => onDelete(group.taskGroupName, idx)}
-                    className="text-red-500"
-                  >
-                    삭제
-                  </button>
+                <td className="border border-gray-300 p-2 text-nowrap">
+                  <span className="">{task.taskName}</span>
+                  {/* <span className="text-end">
+                    <button
+                      onClick={() => onEdit(group.taskGroupName, idx)}
+                      className="text-blue-500 mr-2 cursor-pointer"
+                    >
+                      수정
+                    </button>
+                    <button
+                      onClick={() => onDelete(group.taskGroupName, idx)}
+                      className="text-red-500 cursor-pointer"
+                    >
+                      삭제
+                    </button>
+                  </span> */}
                 </td>
+                <td className="border border-gray-300 p-2 text-nowrap">{task.startDate}</td>
+                <td className="border border-gray-300 p-2 text-nowrap">{task.endDate}</td>
+                <td className="border border-gray-300 p-2 text-nowrap">{task.connectedBranch}</td>
+                <td className="border border-gray-300 p-2 text-nowrap">{task.worker}</td>
               </tr>
             ))
           )}

@@ -1,6 +1,7 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { TaskGroup } from "@/types/chart/TaskGroup";
 import { Task } from "@/types/chart/Task";
+import { GitHubBranch } from "@/types/github/GitHubBranch";
 
 const emptyTask: Task = {
   taskName: "",
@@ -10,16 +11,18 @@ const emptyTask: Task = {
   worker: "",
 };
 
-export const useTaskGroups = (initialData: TaskGroup[]) => {
+export const useTaskGroups = (initialData: TaskGroup[], branches: GitHubBranch[]) => {
   const [taskGroups, setTaskGroups] = useState<TaskGroup[]>(initialData);
   const [selectedGroup, setSelectedGroup] = useState<string>(
     initialData[0]?.taskGroupName || ""
   );
   const [form, setForm] = useState<Task>(emptyTask);
   const [editIndex, setEditIndex] = useState<number | null>(null);
+  const [branchList, setBranchList] = useState(branches);
+  const [selectedBranch, setSelectedBranch] = useState(branches[0].name);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setForm({ ...form, [e.target.name]: e.target.value });
+    setForm({ ...form, [e.target.name]: e.target.value, connectedBranch: selectedBranch });
   };
 
   const handleAddOrUpdate = () => {
@@ -31,7 +34,7 @@ export const useTaskGroups = (initialData: TaskGroup[]) => {
           editIndex !== null
             ? group.tasks.map((t, i) => (i === editIndex ? form : t))
             : [...group.tasks, form];
-        return { ...group, tasks: updatedTasks };
+        return { ...group, tasks: updatedTasks, taskGroupName: selectedGroup };
       })
     );
     setForm(emptyTask);
@@ -67,6 +70,14 @@ export const useTaskGroups = (initialData: TaskGroup[]) => {
     setSelectedGroup(groupName);
   };
 
+  const addNewBranch = (name: string) => {
+    setBranchList(prev => ([...prev, { name, protected: false }]))
+  }
+
+  const deleteTaskGroup = (taskGroupName: string) => {
+    setTaskGroups(prev => prev.filter((item) => item.taskGroupName !== taskGroupName));
+  }
+
   return {
     taskGroups,
     selectedGroup,
@@ -79,5 +90,11 @@ export const useTaskGroups = (initialData: TaskGroup[]) => {
     handleDeleteTask,
     handleEditTask,
     handleAddGroup,
+    selectedBranch,
+    setSelectedBranch,
+    branchList,
+    addNewBranch,
+    deleteTaskGroup,
+    isEditing: editIndex === null ? false: true
   };
 };

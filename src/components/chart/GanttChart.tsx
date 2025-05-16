@@ -1,20 +1,23 @@
-"use client";
+"use client"
 
 import { GanttChartProps } from "@/types/props/GanttChartProps";
 import { getDateRange } from "@/utilities/getDateRange";
 import { differenceInDays, format } from "date-fns";
+import { Edit, Trash } from "lucide-react";
 
-const GanttChart = ({ taskGroups }: GanttChartProps) => {
-  let minDate = new Date(taskGroups[0].tasks[0].startDate);
-  let maxDate = new Date(taskGroups[0].tasks[0].endDate);
+const GanttChart = ({ taskGroups, onEdit, onDelete }: GanttChartProps) => {
+  const allTasks = taskGroups.flatMap(group => group.tasks);
 
-  taskGroups.forEach(group =>
-    group.tasks.forEach(task => {
-      const start = new Date(task.startDate);
-      const end = new Date(task.endDate);
-      if (start < minDate) minDate = start;
-      if (end > maxDate) maxDate = end;
-    })
+  if (allTasks.length === 0) return <p className="text-gray-500 p-4">No tasks to display.</p>;
+
+  const minDate = allTasks.reduce(
+    (min, task) => (new Date(task.startDate) < min ? new Date(task.startDate) : min),
+    new Date(allTasks[0].startDate)
+  );
+
+  const maxDate = allTasks.reduce(
+    (max, task) => (new Date(task.endDate) > max ? new Date(task.endDate) : max),
+    new Date(allTasks[0].endDate)
   );
 
   const dateRange = getDateRange(minDate, maxDate);
@@ -50,7 +53,7 @@ const GanttChart = ({ taskGroups }: GanttChartProps) => {
                 <tr key={`${gIdx}-${tIdx}`} className="h-10 relative">
                   {tIdx === 0 && (
                     <td
-                      className="border border-gray-300 px-2 py-1 align-center"
+                      className="border border-gray-300 px-2 py-1 align-middle"
                       rowSpan={group.tasks.length}
                     >
                       {group.taskGroupName}
@@ -63,14 +66,17 @@ const GanttChart = ({ taskGroups }: GanttChartProps) => {
                     <td key={i} className="border border-gray-300 relative p-0">
                       {i === offset && (
                         <div
-                          className="absolute top-2 left-2 h-6 bg-blue-500 rounded text-white text-xs px-2 flex items-center"
+                          className="absolute top-2 left-2 h-6 bg-gradient-to-br from-blue-500 to-purple-500 rounded text-white text-xs px-2 flex items-center gap-1"
                           style={{
                             width: `${span * cellWidth - 16}px`,
                             zIndex: 1,
                           }}
                           title={`${task.taskName} (${task.startDate} ~ ${task.endDate})`}
                         >
-                          {task.taskName}
+                          <p>{task.taskName}</p>
+                          <div className="flex-1" />
+                          <Edit onClick={() => onEdit(group.taskGroupName, tIdx)} size={14} className="cursor-pointer" />
+                          <Trash onClick={() => onDelete(group.taskGroupName, tIdx)} size={14} className="cursor-pointer" />
                         </div>
                       )}
                     </td>
@@ -85,4 +91,4 @@ const GanttChart = ({ taskGroups }: GanttChartProps) => {
   );
 };
 
-export default GanttChart
+export default GanttChart;
