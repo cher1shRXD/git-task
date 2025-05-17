@@ -6,6 +6,7 @@ import {
   JoinColumn,
 } from 'typeorm';
 import { TaskGroup } from './TaskGroup.entity';
+import { Exclude } from 'class-transformer';
 
 @Entity()
 export class Task {
@@ -16,10 +17,10 @@ export class Task {
   taskName: string;
 
   @Column({ type: 'date' })
-  startDate: Date;
+  startDate: string;
 
   @Column({ type: 'date' })
-  endDate: Date;
+  endDate: string;
 
   @Column()
   connectedBranch: string;
@@ -33,7 +34,8 @@ export class Task {
   @Column()
   taskGroupId: string;
   
-  @ManyToOne(() => TaskGroup, (taskGroup) => taskGroup.tasks, { onDelete: 'CASCADE' })
+  @ManyToOne(() => TaskGroup, (taskGroup) => taskGroup.tasks, { onDelete: 'CASCADE', onUpdate: "CASCADE" })
   @JoinColumn({ name: 'taskGroupId' })
+  @Exclude()
   taskGroup: TaskGroup;
 }

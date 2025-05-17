@@ -4,6 +4,7 @@ import { Task } from "@/types/chart/Task";
 import { GitHubBranch } from "@/types/github/GitHubBranch";
 import { useCreateBranch } from "./useCreateBranch";
 import { toast } from "@/components/provider/ToastProvider";
+import axios from "axios";
 
 const emptyTask: Task = {
   taskName: "",
@@ -14,10 +15,10 @@ const emptyTask: Task = {
   isDone: false
 };
 
-export const useTaskGroups = (initialData: TaskGroup[], branches: GitHubBranch[], defaultBranch?: string, repoName?: string, ownerName?: string) => {
-  const [taskGroups, setTaskGroups] = useState<TaskGroup[]>(initialData);
+export const useTaskGroups = (initialData: TaskGroup[] | null, branches: GitHubBranch[], defaultBranch?: string, repoName?: string, ownerName?: string) => {
+  const [taskGroups, setTaskGroups] = useState(initialData || []);
   const [selectedGroup, setSelectedGroup] = useState<string>(
-    initialData[0]?.taskGroupName || ""
+    initialData![0]?.taskGroupName || ""
   );
   const [form, setForm] = useState<Task>(emptyTask);
   const [editIndex, setEditIndex] = useState<number | null>(null);
@@ -91,6 +92,19 @@ export const useTaskGroups = (initialData: TaskGroup[], branches: GitHubBranch[]
     setTaskGroups(prev => prev.filter((item) => item.taskGroupName !== taskGroupName));
   }
 
+  const saveData = async () => {
+    if(!repoName || !ownerName) return;
+    try{
+      await axios.post('/api/wbs/save', {
+        repositoryName: `${ownerName}/${repoName}`,
+        data: taskGroups
+      });
+      toast.success("변경 사항 저장되었습니다.");
+    }catch{
+      toast.error("변경 사항 저장에 실패했습니다.");
+    }
+  }
+
   return {
     taskGroups,
     selectedGroup,
@@ -107,6 +121,7 @@ export const useTaskGroups = (initialData: TaskGroup[], branches: GitHubBranch[]
     branchList,
     addNewBranch,
     deleteTaskGroup,
-    isEditing: editIndex === null ? false: true
+    isEditing: editIndex === null ? false: true,
+    saveData
   };
 };

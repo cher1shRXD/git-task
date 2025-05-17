@@ -3,6 +3,7 @@ import "dotenv/config";
 import "reflect-metadata"
 import { Task } from "@/schemas/Task.entity";
 import { TaskGroup } from "@/schemas/TaskGroup.entity";
+import { Schedule } from "@/schemas/Schedule.entity";
 
 
 const AppDataSource = new DataSource({
@@ -14,7 +15,7 @@ const AppDataSource = new DataSource({
   database: process.env.DB_NAME,
   synchronize: process.env.NODE_ENV !== "production",
   logging: process.env.NODE_ENV !== "production",
-  entities: [Task, TaskGroup],
+  entities: [Task, TaskGroup, Schedule],
   migrations: ["src/migrations/**/*.ts"],
   subscribers: ["src/subscribers/**/*.ts"],
 });

@@ -5,8 +5,9 @@ import { useTaskGroups } from "@/hooks/useTaskGroups";
 import TaskForm from "./TaskForm";
 import TaskList from "./TaskList";
 import { ChartControllerProps } from "@/types/props/ChartControllerProps";
+import SaveButton from "./SaveButton";
 
-const ChartController = ({ branches, defaultBranch, ownerName, repoName }: ChartControllerProps) => {
+const ChartController = ({ branches, defaultBranch, ownerName, repoName, schedule }: ChartControllerProps) => {
   const {
     taskGroups,
     selectedGroup,
@@ -22,12 +23,16 @@ const ChartController = ({ branches, defaultBranch, ownerName, repoName }: Chart
     setSelectedBranch,
     addNewBranch,
     deleteTaskGroup,
-    isEditing
-  } = useTaskGroups([], branches, defaultBranch, repoName, ownerName);
+    isEditing,
+    saveData
+  } = useTaskGroups(schedule || null, branches, defaultBranch, repoName, ownerName);
 
   return (
     <div className="w-full">
-      <p className="mb-2 mt-8 text-xl font-jetbrains">작업 추가하기</p>
+      <div className="w-full flex items-center gap-4 mt-8 mb-4">
+        <p className="text-xl font-jetbrains">작업 추가하기</p>
+        <SaveButton saveData={saveData} />
+      </div>
       <TaskForm
         selectedGroup={selectedGroup}
         form={form}

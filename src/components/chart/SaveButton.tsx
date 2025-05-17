@@ -1,15 +1,16 @@
 "use client"
 
+import { SaveButtonProps } from "@/types/props/SaveButtonProps";
 import { Save } from "lucide-react"
 import { useEffect } from "react"
 
-const SaveButton = () => {
+const SaveButton = ({ saveData }: SaveButtonProps) => {
 
   useEffect(() => {
     const handler = (event: KeyboardEvent) => {
       if ((event.ctrlKey || event.metaKey) && event.key.toLowerCase() === "s") {
         event.preventDefault();
-        console.log('저장');
+        saveData();
       }
     };
 
@@ -18,7 +19,7 @@ const SaveButton = () => {
   }, []);
 
   return (
-    <button className="flex items-center gap-1 px-3 p-1 rounded bg-blue-400 text-white cursor-pointer">
+    <button className="flex items-center gap-1 px-3 p-1 rounded bg-blue-400 text-white cursor-pointer" onClick={saveData}>
       <Save size={20} />
       <p>저장</p>
     </button>

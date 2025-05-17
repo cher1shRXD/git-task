@@ -1,21 +1,54 @@
 import { initializeDataSource } from "@/libs/typeorm/initialize";
+import { Schedule } from "@/schemas/Schedule.entity";
+import { Task } from "@/schemas/Task.entity";
 import { TaskGroup } from "@/schemas/TaskGroup.entity";
 import { NextRequest, NextResponse } from "next/server";
 
 export const POST = async (req: NextRequest) => {
   try {
     const body = await req.json();
-    const data = body.data as TaskGroup[];
+    const { data, repositoryName } = body as { repositoryName: string, data: TaskGroup[]};
+    console.log(body);
 
     const dataSource = await initializeDataSource();
-    const taskGroupRepo = dataSource.getRepository(TaskGroup);
+    const scheduleRepository = dataSource.getRepository(Schedule);
+    const schedule = await scheduleRepository.findOneByOrFail({ repositoryName });
+    const taskGroupRepository = dataSource.getRepository(TaskGroup);
+    const taskRepository = dataSource.getRepository(Task);
 
-    const savedGroups = await taskGroupRepo.save(data, {
+    for (const group of data) {
+      group.schedule = schedule;
+
+      console.log(group.tasks)
+      if (Array.isArray(group.tasks)) {
+        for (const task of group.tasks) {
+          task.taskGroup = group;
+          
+        }
+      }
+    }
+
+
+    const savedGroups = await taskGroupRepository.save(data, {
       chunk: 30,
       transaction: true,
     });
 
-    return NextResponse.json({ success: true, data: savedGroups });
+    const simplified = savedGroups.map(group => ({
+      id: group.id,
+      taskGroupName: group.taskGroupName,
+      tasks: group.tasks?.map(task => ({
+        id: task.id,
+        taskName: task.taskName,
+        startDate: task.startDate,
+        endDate: task.endDate,
+        connectedBranch: task.connectedBranch,
+        worker: task.worker,
+        isDone: task.isDone,
+      })),
+    }));
+
+    return NextResponse.json({ success: true, data: simplified });
   } catch (err: unknown) {
     console.error("Failed to save TaskGroups:", err);
     return NextResponse.json(

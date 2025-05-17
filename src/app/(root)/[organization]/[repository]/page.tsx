@@ -2,6 +2,8 @@ import ChartController from "@/components/chart/ChartController";
 import SaveButton from "@/components/chart/SaveButton";
 import { fetchGitHubRepoDetail } from "@/services/fetchRepoDetail";
 import { getRepoLanguageColor } from "@/services/getRepoLanguageColor";
+import { getScheduleData } from "@/services/getScheduleData";
+import { TaskGroup } from "@/types/chart/TaskGroup";
 import { parseDate } from "@/utilities/parseDate";
 import { requestWithSession } from "@/utilities/requestWithSession";
 import { Plug, Star } from "lucide-react";
@@ -13,6 +15,8 @@ const RepositoryPage = async ({
 }) => {
   const { organization, repository } = await params;
   const { hasSession, data: repo } = await requestWithSession(fetchGitHubRepoDetail, organization, repository);
+  const { data: schedule } = await requestWithSession(getScheduleData, repo?.fullName!);
+  console.log(schedule);
 
   if(!hasSession) {
     return <div className="w-full h-full flex justify-center items-center">로그인해주세요.</div>;
@@ -26,13 +30,16 @@ const RepositoryPage = async ({
         <div className="w-full flex items-center gap-2">
           <p className="text-3xl font-jetbrains">{repo?.name}</p>
           <span className="border border-blue-300 rounded-full px-2 bg-blue-50 text-gray-500 text-sm">{repo?.private ? "private" : "public"}</span>
-          <div className="flex-1" />
-          <SaveButton />
         </div>
       </div>
       <div className="w-full flex gap-16 flex-col xl:flex-row xl:gap-0 items-start">
         <div className="w-full xl:w-[calc(100%-400px)]">
-          <ChartController ownerName={repo?.owner.login} repoName={repo?.name} defaultBranch={repo?.defaultBranch} branches={repo?.branches || []} />
+          {
+            schedule ? 
+              <ChartController schedule={schedule.taskGroups as TaskGroup[]} ownerName={repo?.owner.login} repoName={repo?.name} defaultBranch={repo?.defaultBranch} branches={repo?.branches || []} /> :
+              <p>로딩중...</p>
+          }
+          
         </div>
         <div className="w-full xl:w-100 flex flex-col gap-4">
           <div className="w-full flex flex-col gap-2 items-start border border-gray-300 p-4 font-jetbrains bg-white">

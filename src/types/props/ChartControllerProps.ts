@@ -1,3 +1,4 @@
+import { TaskGroup } from "../chart/TaskGroup";
 import { GitHubBranch } from "../github/GitHubBranch";
 
 export interface ChartControllerProps {
@@ -5,4 +6,5 @@ export interface ChartControllerProps {
   defaultBranch?: string;
   repoName?: string;
   ownerName?: string;
+  schedule?: TaskGroup[];
 }

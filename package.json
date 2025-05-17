@@ -11,9 +11,12 @@
   "dependencies": {
     "@tanstack/react-query": "^5.67.3",
     "axios": "^1.7.9",
+    "class-transformer": "^0.5.1",
     "cookies-next": "^5.0.2",
     "date-fns": "^4.1.0",
+    "dotenv": "^16.5.0",
     "lucide-react": "^0.510.0",
+    "mysql2": "^3.14.1",
     "next": "15.2.2",
     "next-auth": "^4.24.11",
     "next-client-cookies": "^2.0.1",

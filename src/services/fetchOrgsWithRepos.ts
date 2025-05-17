@@ -15,7 +15,7 @@ export const fetchOrgsWithRepos = async (accessToken: string): Promise<GitHubOrg
     orgs.map(async (org: any): Promise<GitHubOrgWithRepos> => {
       try {
         const { data: repos } = await axios.get(
-          `https://api.github.com/orgs/${org.login}/repos`,
+          `https://api.github.com/orgs/${org.login}/repos?sort=updated&direction=desc`,
           {
             headers,
             params: {

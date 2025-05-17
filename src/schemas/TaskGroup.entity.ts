@@ -2,27 +2,27 @@ import {
   Entity,
   PrimaryGeneratedColumn,
   Column,
-  CreateDateColumn,
   OneToMany,
-  Unique,
+  ManyToOne,
+  JoinColumn,
 } from 'typeorm';
 import { Task } from './Task.entity';
+import { Schedule } from './Schedule.entity';
+import { Type } from 'class-transformer'
 
 @Entity()
-@Unique(["repositoryName"])
 export class TaskGroup {
   @PrimaryGeneratedColumn("uuid")
   id: string;
 
   @Column()
-  repositoryName: string;
-
-  @Column()
   taskGroupName: string;
 
-  @CreateDateColumn()
-  createdAt: Date;
-
   @OneToMany(() => Task, (task) => task.taskGroup, { cascade: true })
+  @Type(() => Task)
   tasks: Task[];
+
+  @ManyToOne(() => Schedule, (schedule) => schedule.taskGroups, { onDelete: "CASCADE", onUpdate: "CASCADE" })
+  @JoinColumn({ name: 'scheduleId' })
+  schedule: Schedule;
 }

@@ -1,5 +1,6 @@
 "use client";
 
+import { Github, Loader } from "lucide-react";
 import { signIn, signOut, useSession } from "next-auth/react";
 import Image from "next/image"
 
@@ -10,9 +11,11 @@ const Header = () => {
     <div className="w-full h-25 px-8 flex items-center justify-between">
       <div></div>
       {
-        status === "loading" ? <p>로딩 중...</p> : session ? 
-          <Image onClick={() => signOut()} src={session.user?.image || "/images/SymbolWithText.svg"} alt="profile image" width={64} height={64} className="rounded-full cursor-pointer" /> : 
-          <button onClick={() => signIn("github")}>깃허브 로그인</button>
+        status === "loading" ? <Loader color="gray" className="animate-spin" /> : !session && 
+          <button className="px-4 py-2 bg-github text-white rounded-lg flex items-center gap-1 cursor-pointer" onClick={() => signIn("github")}>
+            <Github size={16} />
+            <p>깃허브 로그인</p>
+          </button>
       }
       
     </div>

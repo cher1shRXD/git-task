@@ -19,7 +19,7 @@ export const fetchOrgDetail = async (
     );
 
     const { data: repos } = await axios.get(
-      `https://api.github.com/orgs/${orgLogin}/repos`,
+      `https://api.github.com/orgs/${orgLogin}/repos?sort=updated&direction=desc`,
       {
         headers,
         params: {
