@@ -1,4 +1,5 @@
 import LoginRequire from "@/components/common/LoginRequire";
+import NotFound from "@/components/common/NotFound";
 import RepositoryItem from "@/components/RepositoryItem";
 import { fetchOrgDetail } from "@/services/fetchOrgDetail";
 import { GitHubOrgWithRepos } from "@/types/github/GitHubOrgWithRepos";
@@ -15,6 +16,10 @@ const OrganizationPage = async ({
 
   if(!hasSession) {
     return <LoginRequire />;
+  }
+
+  if(org?.id === -1) {
+    return <NotFound />
   }
   
   return (

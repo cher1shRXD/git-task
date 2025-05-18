@@ -1,5 +1,6 @@
 import ChartController from "@/components/chart/ChartController";
 import LoginRequire from "@/components/common/LoginRequire";
+import NotFound from "@/components/common/NotFound";
 import { fetchGitHubRepoDetail } from "@/services/fetchRepoDetail";
 import { getRepoLanguageColor } from "@/services/getRepoLanguageColor";
 import { getScheduleData } from "@/services/getScheduleData";
@@ -20,6 +21,10 @@ const RepositoryPage = async ({
 
   if(!hasSession) {
     return <LoginRequire />;
+  }
+
+  if(repo?.id === -1) {
+    return <NotFound />
   }
 
   const langColor = await getRepoLanguageColor(repo?.language || null);

@@ -56,7 +56,6 @@ export const fetchOrgDetail = async (
       })),
     };
   } catch (err: unknown) {
-    console.error(`Error fetching org or repos for ${orgLogin}:`, (err as AxiosError).message);
     return {
       id: -1,
       login: orgLogin,
