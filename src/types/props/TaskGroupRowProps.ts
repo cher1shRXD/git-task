@@ -1,4 +1,4 @@
-import { Task } from "../chart/Task";
+import { Task } from "../schedule/Task";
 
 export interface TaskGroupRowProps {
   groupName: string;

@@ -1,22 +1,26 @@
 import { initializeDataSource } from "@/libs/typeorm/initialize";
 import { Schedule } from "@/schemas/Schedule.entity";
-import { Task } from "@/schemas/Task.entity";
 import { TaskGroup } from "@/schemas/TaskGroup.entity";
 import { NextRequest, NextResponse } from "next/server";
 
 export const POST = async (req: NextRequest) => {
   try {
     const body = await req.json();
-    const { data, repositoryName } = body as { repositoryName: string, data: TaskGroup[]};
+    const { data } = body as { data: Schedule };
     console.log(body);
 
     const dataSource = await initializeDataSource();
     const scheduleRepository = dataSource.getRepository(Schedule);
-    const schedule = await scheduleRepository.findOneByOrFail({ repositoryName });
+    const originalSchedule = await scheduleRepository.findOneByOrFail({ repositoryName: data.repositoryName });
     const taskGroupRepository = dataSource.getRepository(TaskGroup);
-    const taskRepository = dataSource.getRepository(Task);
 
-    for (const group of data) {
+    originalSchedule.isTrunkBase = data.isTrunkBase;
+
+    console.log(originalSchedule);
+
+    const schedule = await scheduleRepository.save(originalSchedule);
+
+    for (const group of data.taskGroups) {
       group.schedule = schedule;
 
       console.log(group.tasks)
@@ -28,8 +32,7 @@ export const POST = async (req: NextRequest) => {
       }
     }
 
-
-    const savedGroups = await taskGroupRepository.save(data, {
+    const savedGroups = await taskGroupRepository.save(data.taskGroups, {
       chunk: 30,
       transaction: true,
     });

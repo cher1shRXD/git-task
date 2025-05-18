@@ -14,7 +14,7 @@ const Sidebar = async () => {
     return (
       <div className="w-100 h-full p-3">
         <Link href="/" className="h-25 flex items-center pl-4">
-          <Image src="/imags/SymbolWithText.svg" alt="logo" width={848} height={291} className="w-40" priority />
+          <Image src="/images/SymbolWithText.svg" alt="logo" width={848} height={291} className="w-40" priority />
         </Link>
         <p className="text-lg font-semibold text-primary font-jetbrains">Organizations</p>
         <div className="p-2">
@@ -26,9 +26,9 @@ const Sidebar = async () => {
 
   return (
     <div className="w-100 h-full p-3 flex flex-col gap-4">
-      <div className="h-25 flex items-center pl-4">
-        <Image src="/imags/SymbolWithText.svg" alt="logo" width={848} height={291} className="w-40" priority />
-      </div>
+      <Link href="/" className="h-25 flex items-center pl-4">
+        <Image src="/images/SymbolWithText.svg" alt="logo" width={848} height={291} className="w-40" priority />
+      </Link>
     
       <div className="p-2 flex-1 overflow-scroll">
         <div className="w-full flex flex-col gap-4">
@@ -40,7 +40,7 @@ const Sidebar = async () => {
         </div>
       </div>
 
-      <div className="w-full flex flex-col py-2 gap-4 border-t border-blue-400">
+      <div className="w-full flex flex-col p-2 gap-4 shadow-xl rounded-lg">
         <div className="w-full flex items-center gap-2">
           <Image src={user?.avatarUrl || "/images/Symbol.svg"} alt="profile" width={64} height={64} className="rounded-full" priority />
           <div className="w-full flex flex-col gap-0.5">

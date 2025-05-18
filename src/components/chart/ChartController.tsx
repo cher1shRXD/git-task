@@ -24,14 +24,22 @@ const ChartController = ({ branches, defaultBranch, ownerName, repoName, schedul
     addNewBranch,
     deleteTaskGroup,
     isEditing,
-    saveData
+    saveData,
+    isTrunkBase,
+    setIsTrunkBase
   } = useTaskGroups(schedule || null, branches, defaultBranch, repoName, ownerName);
 
   return (
     <div className="w-full">
-      <div className="w-full flex items-center gap-4 mt-8 mb-4">
+      <div className="w-full flex items-center gap-4 mt-8 mb-4 pr-5">
         <p className="text-xl font-jetbrains">작업 추가하기</p>
         <SaveButton saveData={saveData} />
+        <div className="flex-1" />
+        깃허브 전략:
+        <select className="bg-gray-100 p-1 rounded" value={`${isTrunkBase}`} onChange={(e) => setIsTrunkBase(e.target.value === "true" ? true : false)}>
+          <option value="false">Git-Flow</option>
+          <option value="true">Trunk-Base</option>
+        </select>
       </div>
       <TaskForm
         selectedGroup={selectedGroup}

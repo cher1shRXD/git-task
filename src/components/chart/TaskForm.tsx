@@ -23,7 +23,7 @@ const TaskForm = ({
   const [newBranchName, setNewBranchName] = useState("");
 
   return (
-    <div className="flex items-start mb-4 gap-4 mr-4 flex-wrap">
+    <div className="flex items-start mb-4 gap-4 mr-4">
       <div className="flex flex-col gap-2">
         <select value={selectedGroup} onChange={(e) => onSelectGroup(e.target.value)} className="border border-gray-300 p-2 rounded disabled:text-gray-400 disabled:border-gray-200" disabled={isEditing || taskGroups.length === 0}>
           {
@@ -99,7 +99,6 @@ const TaskForm = ({
       <div className="w-[1px] h-69 bg-gray-300" />
 
       <div className="w-80 flex flex-col gap-8">
-        
         <div className="flex flex-col gap-2">
           <input
             placeholder="새 작업 그룹 이름"

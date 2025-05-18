@@ -16,6 +16,9 @@ export class Schedule {
   @Column()
   repositoryName: string;
 
+  @Column({ default: true })
+  isTrunkBase: boolean;
+
   @OneToMany(() => TaskGroup, (taskGroup) => taskGroup.schedule, { cascade: true, eager: true })
   taskGroups: TaskGroup[];
 }

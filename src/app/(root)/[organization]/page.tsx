@@ -1,3 +1,4 @@
+import LoginRequire from "@/components/common/LoginRequire";
 import RepositoryItem from "@/components/RepositoryItem";
 import { fetchOrgDetail } from "@/services/fetchOrgDetail";
 import { GitHubOrgWithRepos } from "@/types/github/GitHubOrgWithRepos";
@@ -13,7 +14,7 @@ const OrganizationPage = async ({
   const { hasSession, data: org } = await requestWithSession<GitHubOrgWithRepos>(fetchOrgDetail, organization);
 
   if(!hasSession) {
-    return <div className="w-full h-full flex justify-center items-center">로그인해주세요.</div>;
+    return <LoginRequire />;
   }
   
   return (

@@ -1,4 +1,4 @@
-import { TaskGroup } from "../chart/TaskGroup";
+import { TaskGroup } from "../schedule/TaskGroup";
 
 export interface GanttChartProps {
   taskGroups: TaskGroup[];

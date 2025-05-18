@@ -1,5 +1,5 @@
-import { Task } from "../chart/Task";
-import { TaskGroup } from "../chart/TaskGroup";
+import { Task } from "../schedule/Task";
+import { TaskGroup } from "../schedule/TaskGroup";
 import { GitHubBranch } from "../github/GitHubBranch";
 
 export interface TaskFormProps {

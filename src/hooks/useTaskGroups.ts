@@ -1,10 +1,10 @@
-import { useState } from "react";
-import { TaskGroup } from "@/types/chart/TaskGroup";
-import { Task } from "@/types/chart/Task";
+import { useMemo, useState } from "react";
+import { Task } from "@/types/schedule/Task";
 import { GitHubBranch } from "@/types/github/GitHubBranch";
 import { useCreateBranch } from "./useCreateBranch";
 import { toast } from "@/components/provider/ToastProvider";
 import axios from "axios";
+import { Schedule } from "@/types/schedule/Schedule";
 
 const emptyTask: Task = {
   taskName: "",
@@ -15,23 +15,31 @@ const emptyTask: Task = {
   isDone: false
 };
 
-export const useTaskGroups = (initialData: TaskGroup[] | null, branches: GitHubBranch[], defaultBranch?: string, repoName?: string, ownerName?: string) => {
-  const [taskGroups, setTaskGroups] = useState(initialData || []);
+export const useTaskGroups = (initialData: Schedule | null, branches: GitHubBranch[], defaultBranch?: string, repoName?: string, ownerName?: string) => {
+  const [taskGroups, setTaskGroups] = useState(initialData?.taskGroups || []);
   const [selectedGroup, setSelectedGroup] = useState<string>(
-    initialData![0]?.taskGroupName || ""
+    initialData?.taskGroups[0]?.taskGroupName || ""
   );
   const [form, setForm] = useState<Task>(emptyTask);
   const [editIndex, setEditIndex] = useState<number | null>(null);
   const [branchList, setBranchList] = useState(branches);
   const [selectedBranch, setSelectedBranch] = useState(branches[0].name);
   const createBranch = useCreateBranch();
+  const [isTrunkBase, setIsTrunkBase] = useState(initialData?.isTrunkBase || false);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setForm({ ...form, [e.target.name]: e.target.value, connectedBranch: selectedBranch });
   };
 
   const handleAddOrUpdate = () => {
-    if (!form.taskName || !form.startDate || !form.endDate) return;
+    if (!form.taskName.trim() || !form.startDate.trim() || !form.endDate.trim() || !form.connectedBranch || !form.worker.trim()) {
+      toast.warning("모든 필드를 채워주세요.");
+      return;
+    }
+    if(Number(new Date(form.startDate)) >= Number(new Date(form.endDate))) {
+      toast.warning("시작일은 종료일보다 늦을 수 없습니다.");
+      return;
+    }
     setTaskGroups((prev) =>
       prev.map((group) => {
         if (group.taskGroupName !== selectedGroup) return group;
@@ -96,14 +104,33 @@ export const useTaskGroups = (initialData: TaskGroup[] | null, branches: GitHubB
     if(!repoName || !ownerName) return;
     try{
       await axios.post('/api/wbs/save', {
-        repositoryName: `${ownerName}/${repoName}`,
-        data: taskGroups
+        data: {
+          repositoryName: `${ownerName}/${repoName}`,
+          isTrunkBase,
+          taskGroups
+        }
       });
       toast.success("변경 사항 저장되었습니다.");
     }catch{
       toast.error("변경 사항 저장에 실패했습니다.");
     }
   }
+
+  const availableBranches = () => {
+    return useMemo(() => {
+      if (!branchList) return [];
+
+      const used = new Set(
+        (taskGroups ?? [])
+          .flatMap((g) => g.tasks ?? [])
+          .map((t) => t.connectedBranch)
+          .filter(Boolean)
+      );
+
+      return branchList.filter((b) => !used.has(b.name));
+    }, [branchList, taskGroups]);
+  };
+
 
   return {
     taskGroups,
@@ -118,10 +145,12 @@ export const useTaskGroups = (initialData: TaskGroup[] | null, branches: GitHubB
     handleAddGroup,
     selectedBranch,
     setSelectedBranch,
-    branchList,
+    branchList: availableBranches().filter((item) => item.name !== defaultBranch),
     addNewBranch,
     deleteTaskGroup,
     isEditing: editIndex === null ? false: true,
-    saveData
+    saveData,
+    isTrunkBase,
+    setIsTrunkBase
   };
 };
