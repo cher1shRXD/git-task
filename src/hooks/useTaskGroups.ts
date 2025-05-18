@@ -1,4 +1,4 @@
-import { useMemo, useState } from "react";
+import { useState } from "react";
 import { Task } from "@/types/schedule/Task";
 import { GitHubBranch } from "@/types/github/GitHubBranch";
 import { useCreateBranch } from "./useCreateBranch";
@@ -117,18 +117,14 @@ export const useTaskGroups = (initialData: Schedule | null, branches: GitHubBran
   }
 
   const availableBranches = () => {
-    return useMemo(() => {
-      if (!branchList) return [];
-
-      const used = new Set(
-        (taskGroups ?? [])
-          .flatMap((g) => g.tasks ?? [])
-          .map((t) => t.connectedBranch)
-          .filter(Boolean)
-      );
-
-      return branchList.filter((b) => !used.has(b.name));
-    }, [branchList, taskGroups]);
+    if (!branchList) return [];
+    const used = new Set(
+      (taskGroups ?? [])
+        .flatMap((g) => g.tasks ?? [])
+        .map((t) => t.connectedBranch)
+        .filter(Boolean)
+    );
+    return branchList.filter((b) => !used.has(b.name));
   };
 
 

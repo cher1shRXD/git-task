@@ -15,7 +15,7 @@ const RepositoryPage = async ({
 }) => {
   const { organization, repository } = await params;
   const { hasSession, data: repo } = await requestWithSession(fetchGitHubRepoDetail, organization, repository);
-  const { data: schedule } = await requestWithSession(getScheduleData, repo?.fullName!);
+  const { data: schedule } = await requestWithSession(getScheduleData, repo?.fullName || "");
   console.log(schedule);
 
   if(!hasSession) {
@@ -62,12 +62,13 @@ const RepositoryPage = async ({
           </div>
           <div className="w-full flex flex-col gap-2 items-start border border-gray-300 p-4 font-jetbrains bg-white">
             <p className="text-lg text-primary">Web Hooks</p>
+            <p className="text-sm">settings {"->"} Webhooks {"->"} Add webhook</p>
             <p className="w-full text-sm">Let me select individual events <br />{"->"} Pull reqeusts 선택 (필수)</p>
             <div className="w-full rounded-lg overflow-hidden">
-              <p className="p-1 px-2 text-sm text-gray-500 bg-gray-100 border border-gray-300 border-b-0 overflow-hidden rounded-t-lg">code</p>
+              <p className="p-1 px-2 text-sm text-gray-500 bg-gray-100 border border-gray-300 border-b-0 overflow-hidden rounded-t-lg">Payload URL</p>
               <input type="text" value="https://git-task.kr/api/github/web-hooks" disabled className="w-full p-2 bg-black text-white" />
             </div>
-            <p className="w-full text-sm text-end">깃허브 레포지토리에 웹 훅을 등록해주세요. <br />웹 훅을 등록해야 완료한 일정이 체크됩니다.</p>
+            <p className="w-full text-sm text-end">깃허브 레포지토리에 웹 훅을 등록해주세요. <br />웹 훅을 등록해야 완료한 작업이 체크됩니다.</p>
           </div>
         </div>
         

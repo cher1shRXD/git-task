@@ -1,6 +1,8 @@
 import axios, { AxiosError } from "axios";
 import { GitHubOrgWithRepos } from "@/types/github/GitHubOrgWithRepos";
 import { GitHubRepo } from "@/types/github/GitHubRepo";
+import { GitHubRepoResponse } from "@/types/github/responses/GitHubRepoResponse";
+import { GitHubOrganizationResponse } from "@/types/github/responses/\bGitHubOrganizationResponse";
 
 export const fetchOrgsWithRepos = async (accessToken: string): Promise<GitHubOrgWithRepos[]> => {
   const headers = {
@@ -12,7 +14,7 @@ export const fetchOrgsWithRepos = async (accessToken: string): Promise<GitHubOrg
   const { data: orgs } = await axios.get("https://api.github.com/user/orgs", { headers });
 
   const orgsWithRepos: GitHubOrgWithRepos[] = await Promise.all(
-    orgs.map(async (org: any): Promise<GitHubOrgWithRepos> => {
+    orgs.map(async (org: GitHubOrganizationResponse): Promise<GitHubOrgWithRepos> => {
       try {
         const { data: repos } = await axios.get(
           `https://api.github.com/orgs/${org.login}/repos?sort=updated&direction=desc`,
@@ -30,7 +32,7 @@ export const fetchOrgsWithRepos = async (accessToken: string): Promise<GitHubOrg
           url: org.url,
           avatarUrl: org.avatar_url,
           description: org.description,
-          repos: repos.map((repo: any): GitHubRepo => ({
+          repos: repos.map((repo: GitHubRepoResponse): GitHubRepo => ({
             id: repo.id,
             name: repo.name,
             fullName: repo.full_name,

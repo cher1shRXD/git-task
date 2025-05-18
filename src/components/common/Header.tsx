@@ -4,7 +4,6 @@ import Link from "next/link";
 import { Github, Loader } from "lucide-react";
 import { signIn, useSession } from "next-auth/react";
 import { usePathname } from "next/navigation";
-import Image from "next/image";
 
 const Header = () => {
   const { data: session, status } = useSession();

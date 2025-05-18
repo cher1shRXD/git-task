@@ -5,7 +5,7 @@ export interface GitHubOrgWithRepos {
   login: string;
   url: string;
   avatarUrl: string;
-  description: string;
+  description: string | null;
   repos: GitHubRepo[];
   error?: string;
 }

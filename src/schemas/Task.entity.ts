@@ -4,7 +4,6 @@ import {
   Column,
   ManyToOne,
   JoinColumn,
-  Unique,
 } from 'typeorm';
 import { TaskGroup } from './TaskGroup.entity';
 import { Exclude } from 'class-transformer';

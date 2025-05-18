@@ -1,6 +1,7 @@
 import axios, { AxiosError } from "axios";
 import { GitHubRepo } from "@/types/github/GitHubRepo";
 import { GitHubOrgWithRepos } from "@/types/github/GitHubOrgWithRepos";
+import { GitHubRepoResponse } from "@/types/github/responses/GitHubRepoResponse";
 
 export const fetchOrgDetail = async (
   accessToken: string,
@@ -34,7 +35,7 @@ export const fetchOrgDetail = async (
       url: org.url,
       avatarUrl: org.avatar_url,
       description: org.description,
-      repos: repos.map((repo: any): GitHubRepo => ({
+      repos: repos.map((repo: GitHubRepoResponse): GitHubRepo => ({
         id: repo.id,
         name: repo.name,
         fullName: repo.full_name,
