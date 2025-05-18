@@ -71,7 +71,7 @@ const RepositoryPage = async ({
             <p className="w-full text-sm">Let me select individual events <br />{"->"} Pull reqeusts 선택 (필수)</p>
             <div className="w-full rounded-lg overflow-hidden">
               <p className="p-1 px-2 text-sm text-gray-500 bg-gray-100 border border-gray-300 border-b-0 overflow-hidden rounded-t-lg">Payload URL</p>
-              <input type="text" value="https://git-task.kr/api/github/web-hooks" disabled className="w-full p-2 bg-black text-white" />
+              <input type="text" value="https://git-task.site/api/github/web-hooks" disabled className="w-full p-2 bg-black text-white" />
             </div>
             <p className="w-full text-sm text-end">깃허브 레포지토리에 웹 훅을 등록해주세요. <br />웹 훅을 등록해야 완료한 작업이 체크됩니다.</p>
           </div>
