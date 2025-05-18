@@ -31,7 +31,7 @@ const ChartController = ({ branches, defaultBranch, ownerName, repoName, schedul
 
   return (
     <div className="w-full">
-      <div className="w-full flex items-center gap-4 mt-8 mb-4 pr-5">
+      <div className="w-full flex items-center gap-4 mt-8 mb-4 pr-4">
         <p className="text-xl font-jetbrains">작업 추가하기</p>
         <SaveButton saveData={saveData} />
         <div className="flex-1" />

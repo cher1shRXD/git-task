@@ -23,8 +23,8 @@ const TaskForm = ({
   const [newBranchName, setNewBranchName] = useState("");
 
   return (
-    <div className="flex items-start mb-4 gap-4 mr-4">
-      <div className="flex flex-col gap-2">
+    <div className="w-full flex items-start mb-4 gap-4 pr-4">
+      <div className="flex-1 flex flex-col gap-2">
         <select value={selectedGroup} onChange={(e) => onSelectGroup(e.target.value)} className="border border-gray-300 p-2 rounded disabled:text-gray-400 disabled:border-gray-200" disabled={isEditing || taskGroups.length === 0}>
           {
             taskGroups.map((item) => (
@@ -39,13 +39,13 @@ const TaskForm = ({
           onChange={handleChange}
           className="border border-gray-300 p-2 rounded"
         />
-        <div className="flex items-center gap-1">
+        <div className="w-full flex items-center gap-1">
           <input
             name="startDate"
             type="date"
             value={form.startDate}
             onChange={handleChange}
-            className="border border-gray-300 p-2 rounded"
+            className="flex-1 border border-gray-300 p-2 rounded"
           />
           ~
           <input
@@ -53,7 +53,7 @@ const TaskForm = ({
             type="date"
             value={form.endDate}
             onChange={handleChange}
-            className="border border-gray-300 p-2 rounded"
+            className="flex-1 border border-gray-300 p-2 rounded"
           />
         </div>
         
