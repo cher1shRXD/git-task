@@ -3,7 +3,6 @@ import "./globals.css";
 import './tailwind.css';
 import {ReactNode} from "react";
 import localFont from "next/font/local";
-import {CookiesProvider} from "next-client-cookies/server";
 import QueryProvider from "@/components/provider/QueryProvider";
 import Header from "@/components/common/Header";
 import Sidebar from "@/components/common/Sidebar";
@@ -33,17 +32,15 @@ const RootLayout = ({
         <ToastContainer />
         <QueryProvider>
           <AuthSessionProvider>
-            <CookiesProvider>
-              <div className="w-full min-w-400 h-screen bg-gradient-to-br from-blue-100 to-purple-300 flex">
-                <Sidebar />
-                <div className="w-[calc(100%-400px)] h-full flex flex-col items-start justify-center">
-                  <Header />
-                  <div className="w-full h-[calc(100%-100px)] bg-white rounded-tl-4xl shadow-2xl overflow-scroll">
-                    {children}
-                  </div>
+            <div className="w-full min-w-400 h-screen bg-gradient-to-br from-blue-100 to-purple-300 flex">
+              <Sidebar />
+              <div className="w-[calc(100%-400px)] h-full flex flex-col items-start justify-center">
+                <Header />
+                <div className="w-full h-[calc(100%-100px)] bg-white rounded-tl-4xl shadow-2xl overflow-scroll">
+                  {children}
                 </div>
               </div>
-            </CookiesProvider>
+            </div>
           </AuthSessionProvider>
         </QueryProvider>
       </body>
