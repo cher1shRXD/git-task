@@ -1,5 +1,5 @@
 # 1단계: 빌드
-FROM node:21 AS builder
+FROM node:21-slim AS builder
 WORKDIR /git-task
 
 # 의존성 설치용 파일 복사 및 설치
@@ -14,7 +14,7 @@ COPY . .
 RUN pnpm build
 
 # 2단계: 실행
-FROM node:21 AS runner
+FROM node:21-slim AS runner
 WORKDIR /git-task
 
 # 프로덕션 의존성만 설치
