@@ -1,6 +1,7 @@
 services:
   db:
     image: mariadb:11.4
+    container_name: db
     restart: unless-stopped
     env_file: 
       - .env.production
