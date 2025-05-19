@@ -5,10 +5,10 @@ services:
     restart: unless-stopped
 
     environment:
-      MYSQL_ROOT_PASSWORD: ${DB_PASSWORD}
-      MYSQL_DATABASE: ${DB_NAME}
-      MYSQL_USER: ${DB_USERNAME}
-      MYSQL_PASSWORD: ${DB_PASSWORD}
+      MYSQL_ROOT_PASSWORD: Tw080401!!**
+      MYSQL_DATABASE: gittask
+      MYSQL_USER: gittask
+      MYSQL_PASSWORD: Tw080401!!**
 
     volumes:
       - dbdata:/var/lib/mysql
@@ -31,9 +31,9 @@ services:
     environment:
       DB_HOST: db
       DB_PORT: 3306
-      DB_USER: ${DB_USERNAME}
-      DB_PASSWORD: ${DB_PASSWORD}
-      DB_NAME: ${DB_NAME}
+      DB_USER: gittask
+      DB_PASSWORD: Tw080401!!**
+      DB_NAME: gittask
 
     ports:
       - "6000:3000"
