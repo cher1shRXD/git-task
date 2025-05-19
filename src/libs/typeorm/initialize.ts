@@ -1,14 +1,9 @@
 import AppDataSource from "./AppDataSource";
 
-let initialized = false;
 
 export const initializeDataSource = async () => {
-  if (!initialized) {
-    if (!AppDataSource.isInitialized) {
-      console.log("init db");
-      await AppDataSource.initialize();
-    }
-    initialized = true;
+  if (!AppDataSource.isInitialized) {
+    await AppDataSource.initialize();
   }
   return AppDataSource;
 };
