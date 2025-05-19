@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { Task } from "@/types/schedule/Task";
 import { GitHubBranch } from "@/types/github/GitHubBranch";
 import { useCreateBranch } from "./useCreateBranch";
@@ -26,6 +26,11 @@ export const useTaskGroups = (initialData: Schedule | null, branches: GitHubBran
   const [selectedBranch, setSelectedBranch] = useState(branches[0].name);
   const createBranch = useCreateBranch();
   const [isTrunkBase, setIsTrunkBase] = useState(initialData?.isTrunkBase || false);
+  const [canSave, setCanSave] = useState(false);
+
+  useEffect(() => {
+    setCanSave(true);
+  },[taskGroups]);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setForm({ ...form, [e.target.name]: e.target.value, connectedBranch: selectedBranch });
@@ -100,21 +105,21 @@ export const useTaskGroups = (initialData: Schedule | null, branches: GitHubBran
     setTaskGroups(prev => prev.filter((item) => item.taskGroupName !== taskGroupName));
   }
 
-  const saveData = async () => {
-    if(!repoName || !ownerName) return;
-    try{
-      await axios.post('/api/wbs/save', {
-        data: {
-          repositoryName: `${ownerName}/${repoName}`,
-          isTrunkBase,
-          taskGroups
-        }
+
+  const saveData = useCallback(async () => {
+    if (!repoName || !ownerName) return;
+    if (!canSave) return;
+
+    try {
+      await axios.post<{ success: boolean, data: Schedule }>('/api/wbs/save', {
+        data: { repositoryName: `${ownerName}/${repoName}`, isTrunkBase, taskGroups },
       });
-      toast.success("변경 사항 저장되었습니다.");
-    }catch{
-      toast.error("변경 사항 저장에 실패했습니다.");
+      toast.success('변경 사항 저장되었습니다.');
+      setCanSave(false);
+    } catch {
+      toast.error('변경 사항 저장에 실패했습니다.');
     }
-  }
+  }, [repoName, ownerName, isTrunkBase, taskGroups, canSave]);
 
   const availableBranches = () => {
     if (!branchList) return [];
@@ -126,6 +131,11 @@ export const useTaskGroups = (initialData: Schedule | null, branches: GitHubBran
     );
     return branchList.filter((b) => !used.has(b.name));
   };
+
+  useEffect(() => {
+    const branch = availableBranches().filter((item) => item.name !== defaultBranch);
+    setSelectedBranch(branch.length > 0 ? branch[0].name : "");
+  },[branchList]);
 
 
   return {
@@ -147,6 +157,7 @@ export const useTaskGroups = (initialData: Schedule | null, branches: GitHubBran
     isEditing: editIndex === null ? false: true,
     saveData,
     isTrunkBase,
-    setIsTrunkBase
+    setIsTrunkBase,
+    canSave
   };
 };

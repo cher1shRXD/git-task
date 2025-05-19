@@ -17,13 +17,30 @@ const TaskForm = ({
   selectedBranch,
   addNewBranch,
   deleteTaskGroup,
-  isEditing
+  isEditing,
+  isTrunkBase,
+  setIsTrunkBase
 }: TaskFormProps) => {
   const [newGroupName, setNewGroupName] = useState("");
   const [newBranchName, setNewBranchName] = useState("");
 
   return (
-    <div className="w-full flex items-start mb-4 gap-4 pr-4">
+    <div className="w-full flex items-start mb-4 gap-4 pr-4 overflow-x-scroll">
+
+      <div className="flex-1 min-w-44 h-69 overflow-scroll">
+        {
+          taskGroups.length > 0 ? taskGroups.map((item) => (
+            <div key={item.taskGroupName} className="flex items-center gap-1">
+              <p className="text-lg">{item.taskGroupName}</p>
+              <p className="text-sm text-gray-400">·</p>
+              <p className="text-sm text-gray-400">{item.tasks.length}개의 작업</p>
+              <div className="flex-1" />
+              <Trash size={14} color="#fb2c36" className="cursor-pointer" onClick={() => deleteTaskGroup(item.taskGroupName)} />
+            </div>
+          )) : <p className="text-sm text-gray-400">작업 그룹이 없습니다.</p>
+        }
+      </div>
+
       <div className="flex-1 flex flex-col gap-2">
         <select value={selectedGroup} onChange={(e) => onSelectGroup(e.target.value)} className="border border-gray-300 p-2 rounded disabled:text-gray-400 disabled:border-gray-200" disabled={isEditing || taskGroups.length === 0}>
           {
@@ -57,7 +74,7 @@ const TaskForm = ({
           />
         </div>
         
-        <select className="border border-gray-300 p-2 rounded" onChange={(e) => onSelectBranch(e.target.value)} value={selectedBranch}>
+        <select className="border border-gray-300 p-2 rounded disabled:text-gray-400 disabled:border-gray-200" onChange={(e) => onSelectBranch(e.target.value)} value={selectedBranch} disabled={isEditing}>
           {
             branchList.map((item) => (
               <option key={item.name} value={item.name}>{item.name}</option>
@@ -80,25 +97,15 @@ const TaskForm = ({
         </button>
       </div>
 
-      <div className="w-[1px] h-69 bg-gray-300" />
-      
-      <div className="w-80 h-69 overflow-scroll">
-        {
-          taskGroups.length > 0 ? taskGroups.map((item) => (
-            <div key={item.taskGroupName} className="flex items-center gap-1">
-              <p className="text-lg">{item.taskGroupName}</p>
-              <p className="text-sm text-gray-400">·</p>
-              <p className="text-sm text-gray-400">{item.tasks.length}개의 작업</p>
-              <div className="flex-1" />
-              <Trash size={14} color="#fb2c36" className="cursor-pointer" onClick={() => deleteTaskGroup(item.taskGroupName)} />
-            </div>
-          )) : <p className="text-sm text-gray-400">작업 그룹이 없습니다.</p>
-        }
-      </div>
+      <div className="w-80 flex flex-col gap-7">
+        <div className="w-full flex flex-col gap-1 text-nowrap">
+          깃허브 전략
+          <select className="flex-1 bg-gray-100 p-1 rounded text-center" value={`${isTrunkBase}`} onChange={(e) => setIsTrunkBase(e.target.value === "true" ? true : false)}>
+            <option value="false">Git-Flow</option>
+            <option value="true">Trunk-Base</option>
+          </select>
+        </div>
 
-      <div className="w-[1px] h-69 bg-gray-300" />
-
-      <div className="w-80 flex flex-col gap-8">
         <div className="flex flex-col gap-2">
           <input
             placeholder="새 작업 그룹 이름"

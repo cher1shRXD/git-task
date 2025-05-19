@@ -30,14 +30,14 @@ const RepositoryPage = async ({
   const langColor = await getRepoLanguageColor(repo?.language || null);
 
   return (
-    <div className="w-full p-8 flex flex-col gap-16">
+    <div className="w-full h-full p-8 flex flex-col gap-16">
       <div className="w-full flex flex-col gap-2">
         <div className="w-full flex items-center gap-2">
           <p className="text-3xl font-jetbrains">{repo?.name}</p>
           <span className="border border-blue-300 rounded-full px-2 bg-blue-50 text-gray-500 text-sm">{repo?.private ? "private" : "public"}</span>
         </div>
       </div>
-      <div className="w-full flex flex-row items-start">
+      <div className="w-full h-full flex items-start">
         <div className="w-[calc(100%-400px)]">
           {
             schedule ? 
@@ -46,8 +46,8 @@ const RepositoryPage = async ({
           }
           
         </div>
-        <div className="w-100 flex flex-col gap-4">
-          <div className="w-full flex flex-col gap-2 items-start border border-gray-300 p-4 font-jetbrains bg-white">
+        <div className="w-100 h-full flex flex-col gap-12 border-l border-gray-300">
+          <div className="w-full flex flex-col gap-2 items-start pl-6 font-jetbrains bg-white">
             <p className="text-lg text-primary">Repository Info</p>
             <p className={`w-full py-2 border-b mb-4 border-gray-300 ${repo?.description ? "" : "text-gray-400"}`}>{repo?.description || "No Descriptions..."}</p>
             { repo?.language && (
@@ -65,7 +65,7 @@ const RepositoryPage = async ({
             <p>Created At: {repo && parseDate(repo?.createdAt)}</p>
             <p>Modified At: {repo && parseDate(repo?.updatedAt)}</p>
           </div>
-          <div className="w-full flex flex-col gap-2 items-start border border-gray-300 p-4 font-jetbrains bg-white">
+          <div className="w-full flex flex-col gap-2 items-start pl-6 font-jetbrains bg-white">
             <p className="text-lg text-primary">Web Hooks</p>
             <p className="text-sm">settings {"->"} Webhooks {"->"} Add webhook</p>
             <p className="w-full text-sm">Let me select individual events <br />{"->"} Pull reqeusts 선택 (필수)</p>

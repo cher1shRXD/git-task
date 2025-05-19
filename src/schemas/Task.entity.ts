@@ -10,8 +10,8 @@ import { Exclude } from 'class-transformer';
 
 @Entity()
 export class Task {
-  @PrimaryGeneratedColumn('uuid')
-  id: string;
+  @PrimaryGeneratedColumn('increment')
+  id: number;
 
   @Column({ type: 'varchar', length: 255 })
   taskName: string;

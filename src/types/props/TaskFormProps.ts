@@ -16,4 +16,6 @@ export interface TaskFormProps {
   addNewBranch: (name: string) => void;
   deleteTaskGroup: (taskGroupName: string) => void;
   isEditing: boolean;
+  isTrunkBase: boolean;
+  setIsTrunkBase: (isTrunkBase: boolean) => void;
 }

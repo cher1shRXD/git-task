@@ -20,6 +20,7 @@ export const getScheduleData = async (_: string, repositoryName: string): Promis
     const newSchedule = new Schedule();
     newSchedule.repositoryName = repositoryName;
     newSchedule.taskGroups = [];
+    newSchedule.isTrunkBase = true;
     data = await scheduleRepository.save(newSchedule);
   }
 

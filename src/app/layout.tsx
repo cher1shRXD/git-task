@@ -32,7 +32,7 @@ const RootLayout = ({
         <ToastContainer />
         <QueryProvider>
           <AuthSessionProvider>
-            <div className="w-full min-w-400 h-screen bg-gradient-to-br from-blue-100 to-purple-300 flex">
+            <div className="w-full min-w-300 h-screen bg-gradient-to-br from-blue-100 to-purple-300 flex">
               <Sidebar />
               <div className="w-[calc(100%-400px)] h-full flex flex-col items-start justify-center">
                 <Header />

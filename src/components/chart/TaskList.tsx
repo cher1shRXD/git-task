@@ -6,7 +6,7 @@ const TaskList = ({
   taskGroups,
 }: TaskListProps) => {
   return (
-    <div className="overflow-x-auto mr-4 mb-4">
+    <div className="overflow-x-auto pr-4 mb-4">
       <table className="table-auto w-250 border-collapse border border-gray-300">
         <thead>
           <tr className="font-jetbrains">

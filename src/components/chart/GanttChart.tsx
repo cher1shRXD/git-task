@@ -24,7 +24,7 @@ const GanttChart = ({ taskGroups, onEdit, onDelete }: GanttChartProps) => {
   const cellWidth = 52;
 
   return (
-    <div className="overflow-auto bg-white text-sm">
+    <div className="overflow-auto bg-white text-sm pr-4">
       <table className="table-fixed border-collapse min-w-max">
         <thead>
           <tr className="font-jetbrains font-medium">
@@ -75,8 +75,14 @@ const GanttChart = ({ taskGroups, onEdit, onDelete }: GanttChartProps) => {
                         >
                           <p className="whitespace-nowrap overflow-hidden text-ellipsis">{task.taskName}</p>
                           <div className="flex-1" />
-                          <Edit onClick={() => onEdit(group.taskGroupName, tIdx)} size={14} className="cursor-pointer" />
-                          <Trash onClick={() => onDelete(group.taskGroupName, tIdx)} size={14} className="cursor-pointer" />
+                          {
+                            !task.isDone && (
+                              <>
+                                <Edit onClick={() => onEdit(group.taskGroupName, tIdx)} size={14} className="cursor-pointer" />
+                                <Trash onClick={() => onDelete(group.taskGroupName, tIdx)} size={14} className="cursor-pointer" />
+                              </>
+                            )
+                          }
                         </div>
                       )}
                     </td>
