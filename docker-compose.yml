@@ -10,8 +10,6 @@ services:
       MYSQL_USER: ${DB_USERNAME}
       MYSQL_PASSWORD: ${DB_PASSWORD}
 
-    env_file: '.env.production'
-
     volumes:
       - dbdata:/var/lib/mysql
     ports:
@@ -36,8 +34,6 @@ services:
       DB_USER: ${DB_USERNAME}
       DB_PASSWORD: ${DB_PASSWORD}
       DB_NAME: ${DB_NAME}
-
-    env_file: '.env.production'
 
     ports:
       - "6000:3000"
