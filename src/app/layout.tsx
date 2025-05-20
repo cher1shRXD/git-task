@@ -34,7 +34,7 @@ const RootLayout = ({
           <AuthSessionProvider>
             <div className="w-full min-w-300 h-screen bg-gradient-to-br from-blue-100 to-purple-300 flex">
               <Sidebar />
-              <div className="w-[calc(100%-400px)] h-full flex flex-col items-start justify-center">
+              <div className="w-[calc(100%-320px)] 2xl:w-[calc(100%-400px)] h-full flex flex-col items-start justify-center">
                 <Header />
                 <div className="w-full h-[calc(100%-100px)] bg-white rounded-tl-4xl shadow-2xl overflow-scroll">
                   {children}

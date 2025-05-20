@@ -12,7 +12,7 @@ const Sidebar = async () => {
 
   if(!hasSession) {
     return (
-      <div className="w-100 h-full p-3">
+      <div className="w-80 2xl:w-100 h-full p-3">
         <Link href="/" className="h-25 flex items-center pl-4">
           <Image src="/images/SymbolWithText.svg" alt="logo" width={848} height={291} className="w-40" priority />
         </Link>

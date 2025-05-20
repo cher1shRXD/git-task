@@ -38,7 +38,7 @@ const RepositoryPage = async ({
         </div>
       </div>
       <div className="w-full h-full flex items-start">
-        <div className="w-[calc(100%-400px)]">
+        <div className="w-[calc(100%-320px)] 2xl:w-[calc(100%-400px)]">
           {
             schedule ? 
               <ChartController schedule={schedule} ownerName={repo?.owner.login} repoName={repo?.name} defaultBranch={repo?.defaultBranch} branches={repo?.branches || []} /> :
@@ -46,7 +46,7 @@ const RepositoryPage = async ({
           }
           
         </div>
-        <div className="w-100 h-full flex flex-col gap-12 border-l border-gray-300">
+        <div className="w-80 2xl:w-100 h-full flex flex-col gap-12 border-l border-gray-300">
           <div className="w-full flex flex-col gap-2 items-start pl-6 font-jetbrains bg-white">
             <p className="text-lg text-primary">Repository Info</p>
             <p className={`w-full py-2 border-b mb-4 border-gray-300 ${repo?.description ? "" : "text-gray-400"}`}>{repo?.description || "No Descriptions..."}</p>
