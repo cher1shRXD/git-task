@@ -30,7 +30,7 @@ const RepositoryPage = async ({
   const langColor = await getRepoLanguageColor(repo?.language || null);
 
   return (
-    <div className="w-full h-full p-8 flex flex-col gap-16">
+    <div className="w-full h-full p-8 flex flex-col gap-16 pb-20">
       <div className="w-full flex flex-col gap-2">
         <div className="w-full flex items-center gap-2">
           <p className="text-3xl font-jetbrains">{repo?.name}</p>
@@ -46,7 +46,7 @@ const RepositoryPage = async ({
           }
           
         </div>
-        <div className="w-80 2xl:w-100 h-full flex flex-col gap-12 border-l border-gray-300">
+        <div className="w-80 2xl:w-100 h-full flex flex-col gap-12 border-l border-gray-300 text-sm 2xl:text-base">
           <div className="w-full flex flex-col gap-2 items-start pl-6 font-jetbrains bg-white">
             <p className="text-lg text-primary">Repository Info</p>
             <p className={`w-full py-2 border-b mb-4 border-gray-300 ${repo?.description ? "" : "text-gray-400"}`}>{repo?.description || "No Descriptions..."}</p>

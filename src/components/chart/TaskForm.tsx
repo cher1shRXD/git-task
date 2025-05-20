@@ -25,15 +25,15 @@ const TaskForm = ({
   const [newBranchName, setNewBranchName] = useState("");
 
   return (
-    <div className="w-full flex items-start mb-4 gap-4 pr-4 overflow-x-scroll">
+    <div className="w-full h-70 flex items-start mb-4 gap-4 pr-4 overflow-x-scroll">
 
-      <div className="flex-1 min-w-44 h-69 overflow-scroll">
+      <div className="flex-1 min-w-44 h-full overflow-scroll">
         {
           taskGroups.length > 0 ? taskGroups.map((item) => (
             <div key={item.taskGroupName} className="flex items-center gap-1">
-              <p className="text-lg">{item.taskGroupName}</p>
+              <p className="text-lg text-ellipsis whitespace-nowrap overflow-x-hidden">{item.taskGroupName}</p>
               <p className="text-sm text-gray-400">·</p>
-              <p className="text-sm text-gray-400">{item.tasks.length}개의 작업</p>
+              <p className="text-sm text-gray-400 text-nowrap">{item.tasks.length}개의 작업</p>
               <div className="flex-1" />
               <Trash size={14} color="#fb2c36" className="cursor-pointer" onClick={() => deleteTaskGroup(item.taskGroupName)} />
             </div>
@@ -41,7 +41,7 @@ const TaskForm = ({
         }
       </div>
 
-      <div className="flex-1 flex flex-col gap-2">
+      <div className="h-full flex-1 flex flex-col justify-between">
         <select value={selectedGroup} onChange={(e) => onSelectGroup(e.target.value)} className="border border-gray-300 p-2 rounded disabled:text-gray-400 disabled:border-gray-200" disabled={isEditing || taskGroups.length === 0}>
           {
             taskGroups.map((item) => (
@@ -97,7 +97,7 @@ const TaskForm = ({
         </button>
       </div>
 
-      <div className="w-80 flex flex-col gap-7">
+      <div className="w-80 h-full flex flex-col justify-between">
         <div className="w-full flex flex-col gap-1 text-nowrap">
           깃허브 전략
           <select className="flex-1 bg-gray-100 p-1 rounded text-center" value={`${isTrunkBase}`} onChange={(e) => setIsTrunkBase(e.target.value === "true" ? true : false)}>
