@@ -1,6 +1,7 @@
 "use client";
 
 import { TaskFormProps } from "@/types/props/TaskFormProps";
+import { Task } from "@/types/schedule/Task";
 import { Github, Trash } from "lucide-react";
 import { useState } from "react";
 
@@ -12,14 +13,13 @@ const TaskForm = ({
   handleAddGroup,
   taskGroups,
   onSelectGroup,
-  branchList,
-  onSelectBranch,
-  selectedBranch,
   addNewBranch,
   deleteTaskGroup,
   isEditing,
   isTrunkBase,
-  setIsTrunkBase
+  setIsTrunkBase,
+  availableBranches,
+  setForm
 }: TaskFormProps) => {
   const [newGroupName, setNewGroupName] = useState("");
   const [newBranchName, setNewBranchName] = useState("");
@@ -74,9 +74,9 @@ const TaskForm = ({
           />
         </div>
         
-        <select className="border border-gray-300 p-2 rounded disabled:text-gray-400 disabled:border-gray-200" onChange={(e) => onSelectBranch(e.target.value)} value={selectedBranch} disabled={isEditing}>
+        <select className="border border-gray-300 p-2 rounded disabled:text-gray-400 disabled:border-gray-200" onChange={(e) => setForm({ ...form, connectedBranch: e.target.value })} value={form.connectedBranch} disabled={isEditing}>
           {
-            branchList.map((item) => (
+            availableBranches.map((item) => (
               <option key={item.name} value={item.name}>{item.name}</option>
             ))
           }

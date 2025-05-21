@@ -1,72 +1,130 @@
-import { useCallback, useEffect, useState } from "react";
+"use client";
+
+import { useCallback, useEffect, useMemo, useState } from "react";
 import { Task } from "@/types/schedule/Task";
 import { GitHubBranch } from "@/types/github/GitHubBranch";
 import { useCreateBranch } from "./useCreateBranch";
 import { toast } from "@/components/provider/ToastProvider";
 import axios from "axios";
 import { Schedule } from "@/types/schedule/Schedule";
+import { TaskGroup } from "@/types/schedule/TaskGroup";
 
 const emptyTask: Task = {
   taskName: "",
   startDate: "",
   endDate: "",
-  connectedBranch: "",
+  connectedBranch: "브랜치 선택",
   worker: "",
   isDone: false
 };
 
-export const useTaskGroups = (initialData: Schedule | null, branches: GitHubBranch[], defaultBranch?: string, repoName?: string, ownerName?: string) => {
-  const [taskGroups, setTaskGroups] = useState(initialData?.taskGroups || []);
-  const [selectedGroup, setSelectedGroup] = useState<string>(
-    initialData?.taskGroups[0]?.taskGroupName || ""
-  );
+export const useTaskGroups = (
+  initialData: Schedule | null,
+  branches: GitHubBranch[],
+  defaultBranch?: string,
+  repoName?: string,
+  ownerName?: string
+) => {
+  const [taskGroups, setTaskGroups] = useState<TaskGroup[]>([]);
+  const [selectedGroup, setSelectedGroup] = useState<string>("");
   const [form, setForm] = useState<Task>(emptyTask);
   const [editIndex, setEditIndex] = useState<number | null>(null);
-  const [branchList, setBranchList] = useState(branches);
-  const [selectedBranch, setSelectedBranch] = useState(branches[0].name);
   const createBranch = useCreateBranch();
-  const [isTrunkBase, setIsTrunkBase] = useState(initialData?.isTrunkBase || false);
+  const [isTrunkBase, setIsTrunkBase] = useState(false);
   const [canSave, setCanSave] = useState(false);
 
+  const availableBranches = useMemo(() => {
+    if (!branches || branches.length === 0) return [];
+
+    const usedBranches = new Set(
+      taskGroups
+        .flatMap(group => group.tasks)
+        .map(task => task.connectedBranch)
+        .filter(branch => branch && branch !== "브랜치 선택")
+    );
+
+    return branches
+      .filter(branch => branch.name !== defaultBranch)
+      .filter(branch => !usedBranches.has(branch.name));
+  }, [branches, taskGroups, defaultBranch]);
+
   useEffect(() => {
-    setCanSave(true);
-  },[taskGroups]);
+    if (initialData) {
+      setTaskGroups(initialData.taskGroups);
+      setSelectedGroup(
+        initialData.taskGroups.length > 0
+          ? initialData.taskGroups[0].taskGroupName
+          : ""
+      );
+      setIsTrunkBase(initialData.isTrunkBase || false);
+    }
+  }, [initialData]);
+
+  useEffect(() => {
+    const nextBranch = availableBranches[0]?.name || "브랜치 선택";
+    setForm(prev => ({ ...prev, connectedBranch: nextBranch }));
+  }, [availableBranches]);
+
+  useEffect(() => {
+    setCanSave(taskGroups.length > 0);
+  }, [taskGroups]);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setForm({ ...form, [e.target.name]: e.target.value, connectedBranch: selectedBranch });
+    setForm({
+      ...form,
+      [e.target.name]: e.target.value,
+    });
   };
 
   const handleAddOrUpdate = () => {
-    if (!form.taskName.trim() || !form.startDate.trim() || !form.endDate.trim() || !form.connectedBranch || !form.worker.trim()) {
+    const { taskName, worker, startDate, endDate, connectedBranch } = form;
+
+    if (
+      !taskName.trim() ||
+      !worker.trim() ||
+      !startDate.trim() ||
+      !endDate.trim() ||
+      !connectedBranch ||
+      connectedBranch === "브랜치 선택"
+    ) {
       toast.warning("모든 필드를 채워주세요.");
       return;
     }
-    if(Number(new Date(form.startDate)) >= Number(new Date(form.endDate))) {
+
+    if (new Date(startDate) >= new Date(endDate)) {
       toast.warning("시작일은 종료일보다 늦을 수 없습니다.");
       return;
     }
-    setTaskGroups((prev) =>
-      prev.map((group) => {
+
+    setTaskGroups(prev =>
+      prev.map(group => {
         if (group.taskGroupName !== selectedGroup) return group;
+
         const updatedTasks =
           editIndex !== null
             ? group.tasks.map((t, i) => (i === editIndex ? form : t))
             : [...group.tasks, form];
-        return { ...group, tasks: updatedTasks, taskGroupName: selectedGroup };
+
+        return { ...group, tasks: updatedTasks };
       })
     );
+
     setForm(emptyTask);
     setEditIndex(null);
   };
 
   const handleDeleteTask = (groupName: string, index: number) => {
-    setTaskGroups((prev) =>
-      prev.map((group) =>
+    setTaskGroups(prev =>
+      prev.map(group =>
         group.taskGroupName === groupName
-          ? { ...group, tasks: group.tasks.filter((_, i) => i !== index) }
+          ? {
+              ...group,
+              tasks: group.tasks.filter((_, i) => i !== index)
+            }
           : group
       )
     );
+
     if (selectedGroup === groupName && editIndex === index) {
       setForm(emptyTask);
       setEditIndex(null);
@@ -74,8 +132,9 @@ export const useTaskGroups = (initialData: Schedule | null, branches: GitHubBran
   };
 
   const handleEditTask = (groupName: string, index: number) => {
-    const group = taskGroups.find((g) => g.taskGroupName === groupName);
+    const group = taskGroups.find(g => g.taskGroupName === groupName);
     if (!group) return;
+
     setSelectedGroup(groupName);
     setForm(group.tasks[index]);
     setEditIndex(index);
@@ -83,60 +142,78 @@ export const useTaskGroups = (initialData: Schedule | null, branches: GitHubBran
 
   const handleAddGroup = (groupName: string) => {
     if (!groupName.trim()) return;
-    if (taskGroups.find((g) => g.taskGroupName === groupName)) return;
+
+    if (taskGroups.find(g => g.taskGroupName === groupName)) {
+      toast.warning("이미 존재하는 그룹 이름입니다.");
+      return;
+    }
+
     setTaskGroups([...taskGroups, { taskGroupName: groupName, tasks: [] }]);
     setSelectedGroup(groupName);
   };
 
   const addNewBranch = async (name: string) => {
-    if(!defaultBranch || !repoName || !ownerName) return;
-    try{
+    if (!defaultBranch || !repoName || !ownerName) {
+      toast.error("브랜치 생성에 필요한 정보가 부족합니다.");
+      return;
+    }
+
+    try {
       const data = await createBranch(ownerName, repoName, defaultBranch, name);
-      if(data.success) {
-        setBranchList(prev => ([...prev, { name, protected: false }]));
+      if (data.success) {
         toast.success("브랜치 생성 성공");
+        setForm(prev => ({ ...prev, connectedBranch: name }));
       }
-    }catch{
+    } catch {
       toast.error("브랜치 생성 실패");
     }
-  }
+  };
 
   const deleteTaskGroup = (taskGroupName: string) => {
-    setTaskGroups(prev => prev.filter((item) => item.taskGroupName !== taskGroupName));
-  }
+    setTaskGroups(prev =>
+      prev.filter(item => item.taskGroupName !== taskGroupName)
+    );
 
+    if (selectedGroup === taskGroupName) {
+      const nextGroup =
+        taskGroups.find(g => g.taskGroupName !== taskGroupName)?.taskGroupName ||
+        "";
+      setSelectedGroup(nextGroup);
+      setForm(emptyTask);
+      setEditIndex(null);
+    }
+  };
 
   const saveData = useCallback(async () => {
-    if (!repoName || !ownerName) return;
+    if (!repoName || !ownerName) {
+      toast.error("저장에 필요한 정보가 부족합니다.");
+      return;
+    }
+
     if (!canSave) return;
 
     try {
-      await axios.post<{ success: boolean, data: Schedule }>('/api/wbs/save', {
-        data: { repositoryName: `${ownerName}/${repoName}`, isTrunkBase, taskGroups },
-      });
-      toast.success('변경 사항 저장되었습니다.');
-      setCanSave(false);
+      const response = await axios.post<{ success: boolean; data: Schedule }>(
+        "/api/wbs/save",
+        {
+          data: {
+            repositoryName: `${ownerName}/${repoName}`,
+            isTrunkBase,
+            taskGroups
+          }
+        }
+      );
+
+      if (response.data.success) {
+        toast.success("변경 사항이 저장되었습니다.");
+        setCanSave(false);
+      } else {
+        toast.error("저장에 실패했습니다.");
+      }
     } catch {
-      toast.error('변경 사항 저장에 실패했습니다.');
+      toast.error("변경 사항 저장에 실패했습니다.");
     }
   }, [repoName, ownerName, isTrunkBase, taskGroups, canSave]);
-
-  const availableBranches = () => {
-    if (!branchList) return [];
-    const used = new Set(
-      (taskGroups ?? [])
-        .flatMap((g) => g.tasks ?? [])
-        .map((t) => t.connectedBranch)
-        .filter(Boolean)
-    );
-    return branchList.filter((b) => !used.has(b.name));
-  };
-
-  useEffect(() => {
-    const branch = availableBranches().filter((item) => item.name !== defaultBranch);
-    setSelectedBranch(branch.length > 0 ? branch[0].name : "");
-  },[branchList]);
-
 
   return {
     taskGroups,
@@ -149,12 +226,10 @@ export const useTaskGroups = (initialData: Schedule | null, branches: GitHubBran
     handleDeleteTask,
     handleEditTask,
     handleAddGroup,
-    selectedBranch,
-    setSelectedBranch,
-    branchList: availableBranches().filter((item) => item.name !== defaultBranch),
+    availableBranches,
     addNewBranch,
     deleteTaskGroup,
-    isEditing: editIndex === null ? false: true,
+    isEditing: editIndex !== null,
     saveData,
     isTrunkBase,
     setIsTrunkBase,

@@ -10,9 +10,8 @@ export interface TaskFormProps {
   handleAddGroup: (name: string) => void;
   taskGroups: TaskGroup[];
   onSelectGroup: (groupName: string) => void;
-  onSelectBranch: (branch: string) => void;
-  branchList: GitHubBranch[];
-  selectedBranch: string;
+  availableBranches: GitHubBranch[];
+  setForm: (form: Task) => void;
   addNewBranch: (name: string) => void;
   deleteTaskGroup: (taskGroupName: string) => void;
   isEditing: boolean;

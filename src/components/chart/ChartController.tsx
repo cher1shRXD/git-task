@@ -18,16 +18,15 @@ const ChartController = ({ branches, defaultBranch, ownerName, repoName, schedul
     handleDeleteTask,
     handleAddGroup,
     setSelectedGroup,
-    branchList,
-    selectedBranch,
-    setSelectedBranch,
     addNewBranch,
     deleteTaskGroup,
     isEditing,
     saveData,
     isTrunkBase,
     setIsTrunkBase,
-    canSave
+    canSave,
+    availableBranches,
+    setForm
   } = useTaskGroups(schedule || null, branches, defaultBranch, repoName, ownerName);
 
   return (
@@ -44,14 +43,20 @@ const ChartController = ({ branches, defaultBranch, ownerName, repoName, schedul
         handleAddGroup={handleAddGroup}
         taskGroups={taskGroups}
         onSelectGroup={setSelectedGroup}
-        branchList={branchList}
-        onSelectBranch={setSelectedBranch}
-        selectedBranch={selectedBranch}
         addNewBranch={addNewBranch}
         deleteTaskGroup={deleteTaskGroup}
         isEditing={isEditing}
         isTrunkBase={isTrunkBase}
         setIsTrunkBase={setIsTrunkBase}
+        availableBranches={availableBranches}
+        setForm={setForm}
+      />
+
+      <p className="mb-2 mt-8 text-xl font-jetbrains">간트 차트</p>
+      <GanttChart 
+        taskGroups={taskGroups} 
+        onEdit={handleEditTask}
+        onDelete={handleDeleteTask}
       />
 
       <p className="mb-2 mt-8 text-xl font-jetbrains">작업 목록</p>
@@ -62,12 +67,7 @@ const ChartController = ({ branches, defaultBranch, ownerName, repoName, schedul
         selectedGroup={selectedGroup}
       />
 
-      <p className="mb-2 mt-8 text-xl font-jetbrains">간트 차트</p>
-      <GanttChart 
-        taskGroups={taskGroups} 
-        onEdit={handleEditTask}
-        onDelete={handleDeleteTask}
-      />
+      
     </div>
   );
 };

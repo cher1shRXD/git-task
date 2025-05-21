@@ -36,7 +36,7 @@ const RootLayout = ({
               <Sidebar />
               <div className="w-[calc(100%-320px)] 2xl:w-[calc(100%-400px)] h-full flex flex-col items-start justify-center">
                 <Header />
-                <div className="w-full h-[calc(100%-100px)] bg-white rounded-tl-4xl shadow-2xl overflow-scroll">
+                <div className="w-full h-[calc(100%-100px)] bg-white rounded-tl-4xl shadow-2xl overflow-scroll pb-10">
                   {children}
                 </div>
               </div>
