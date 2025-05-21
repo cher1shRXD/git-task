@@ -1,7 +1,6 @@
 "use client";
 
 import { TaskFormProps } from "@/types/props/TaskFormProps";
-import { Task } from "@/types/schedule/Task";
 import { Github, Trash } from "lucide-react";
 import { useState } from "react";
 

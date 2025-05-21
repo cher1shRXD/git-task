@@ -7,17 +7,17 @@ import { getScheduleData } from "@/services/getScheduleData";
 import { parseDate } from "@/utilities/parseDate";
 import { requestWithSession } from "@/utilities/requestWithSession";
 import { Plug, Star } from "lucide-react";
+import { Suspense } from "react";
 
 
 const RepositoryPage = async ({
   params,
 }: {
-  params: Promise<{ organization: string, repository: string }>;
+  params: { organization: string, repository: string };
 }) => {
-  const { organization, repository } = await params;
+  const { organization, repository } = params;
   const { hasSession, data: repo } = await requestWithSession(fetchGitHubRepoDetail, organization, repository);
   const { data: schedule } = await requestWithSession(getScheduleData, repo?.fullName || "");
-  console.log(schedule);
 
   if(!hasSession) {
     return <LoginRequire />;
@@ -39,11 +39,17 @@ const RepositoryPage = async ({
       </div>
       <div className="w-full flex-1 flex items-start">
         <div className="w-[calc(100%-320px)] 2xl:w-[calc(100%-400px)] border-r border-gray-300">
-          {
-            schedule ? 
-              <ChartController schedule={schedule} ownerName={repo?.owner.login} repoName={repo?.name} defaultBranch={repo?.defaultBranch} branches={repo?.branches || []} /> :
-              <p>로딩중...</p>
-          }
+          <Suspense fallback={<p>차트 로딩 중...</p>}>
+            {schedule && (
+              <ChartController
+                schedule={schedule}
+                ownerName={repo?.owner.login}
+                repoName={repo?.name}
+                defaultBranch={repo?.defaultBranch}
+                branches={repo?.branches || []}
+              />
+            )}
+          </Suspense>
         </div>
         <div className="w-80 2xl:w-100 flex flex-col gap-12 text-sm 2xl:text-base">
           <div className="w-full flex flex-col gap-2 items-start pl-6 font-jetbrains bg-white">

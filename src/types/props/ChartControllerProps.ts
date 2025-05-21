@@ -6,5 +6,5 @@ export interface ChartControllerProps {
   defaultBranch?: string;
   repoName?: string;
   ownerName?: string;
-  schedule?: Schedule;
+  schedule: Schedule | null;
 }

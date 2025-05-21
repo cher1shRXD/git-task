@@ -25,19 +25,19 @@ export const POST = async (req: NextRequest) => {
     for (const group of data.taskGroups) {
       group.schedule = schedule;
 
-      console.log(group.tasks)
       if (Array.isArray(group.tasks)) {
         for (const task of group.tasks) {
           task.taskGroup = group;
-          
         }
       }
     }
 
+    await scheduleRepository.save(schedule);
     await taskGroupRepository.save(data.taskGroups, {
       chunk: 30,
       transaction: true,
     });
+
 
     console.log(schedule);
 

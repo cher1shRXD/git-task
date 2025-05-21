@@ -12,7 +12,7 @@ const Header = () => {
   const segments = pathname.split("/").filter(Boolean);
 
   return (
-    <div className="w-full h-25 px-8 flex items-center justify-between">
+    <div className="w-full h-18 2xl:h-25 px-8 flex items-center justify-between">
       <div className="px-4 py-1 rounded-lg bg-gradient-to-br from-blue-200 to-purple-200 font-jetbrains flex items-center gap-2 self-end mb-3">
         {segments.length > 0 ? segments.map((seg, idx) => {
           const href = "/" + segments.slice(0, idx + 1).join("/");

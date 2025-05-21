@@ -66,8 +66,8 @@ export const useTaskGroups = (
   }, [availableBranches]);
 
   useEffect(() => {
-    setCanSave(taskGroups.length > 0);
-  }, [taskGroups]);
+    setCanSave(true);
+  }, [isTrunkBase || false, taskGroups]);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setForm({
@@ -185,6 +185,8 @@ export const useTaskGroups = (
   };
 
   const saveData = useCallback(async () => {
+    console.log(isTrunkBase);
+
     if (!repoName || !ownerName) {
       toast.error("저장에 필요한 정보가 부족합니다.");
       return;
@@ -193,7 +195,8 @@ export const useTaskGroups = (
     if (!canSave) return;
 
     try {
-      const response = await axios.post<{ success: boolean; data: Schedule }>(
+      console.log(isTrunkBase);
+      const { data } = await axios.post<{ success: boolean; data: Schedule }>(
         "/api/wbs/save",
         {
           data: {
@@ -204,7 +207,7 @@ export const useTaskGroups = (
         }
       );
 
-      if (response.data.success) {
+      if (data.success) {
         toast.success("변경 사항이 저장되었습니다.");
         setCanSave(false);
       } else {

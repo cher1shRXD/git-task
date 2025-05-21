@@ -27,7 +27,7 @@ const ChartController = ({ branches, defaultBranch, ownerName, repoName, schedul
     canSave,
     availableBranches,
     setForm
-  } = useTaskGroups(schedule || null, branches, defaultBranch, repoName, ownerName);
+  } = useTaskGroups(schedule, branches, defaultBranch, repoName, ownerName);
 
   return (
     <div className="w-full">
