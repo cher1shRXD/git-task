@@ -13,9 +13,9 @@ import { Suspense } from "react";
 const RepositoryPage = async ({
   params,
 }: {
-  params: { organization: string, repository: string };
+  params: Promise<{ organization: string, repository: string }>;
 }) => {
-  const { organization, repository } = params;
+  const { organization, repository } = await params;
   const { hasSession, data: repo } = await requestWithSession(fetchGitHubRepoDetail, organization, repository);
   const { data: schedule } = await requestWithSession(getScheduleData, repo?.fullName || "");
 
