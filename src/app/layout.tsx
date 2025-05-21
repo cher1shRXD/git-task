@@ -1,13 +1,14 @@
 import type { Metadata } from "next";
 import "./globals.css";
 import './tailwind.css';
-import {ReactNode} from "react";
+import {ReactNode, Suspense} from "react";
 import localFont from "next/font/local";
 import QueryProvider from "@/components/provider/QueryProvider";
 import Header from "@/components/common/Header";
 import Sidebar from "@/components/common/Sidebar";
 import AuthSessionProvider from "@/components/provider/SessionProvider";
 import ToastContainer from "@/components/provider/ToastProvider";
+import Loading from "./(root)/loading";
 
 export const metadata: Metadata = {
   title: "Git-TASK",
@@ -37,7 +38,9 @@ const RootLayout = ({
               <div className="w-[calc(100%-320px)] 2xl:w-[calc(100%-400px)] h-full flex flex-col items-start justify-center">
                 <Header />
                 <div className="w-full h-[calc(100%-72px)] 2xl:h-[calc(100%-100px)] bg-white rounded-tl-4xl shadow-2xl overflow-scroll pb-10">
-                  {children}
+                  <Suspense fallback={<Loading />}>
+                    {children}
+                  </Suspense>
                 </div>
               </div>
             </div>
