@@ -1,14 +1,13 @@
 import type { Metadata } from "next";
 import "./globals.css";
 import './tailwind.css';
-import {ReactNode, Suspense} from "react";
+import {ReactNode} from "react";
 import localFont from "next/font/local";
 import QueryProvider from "@/components/provider/QueryProvider";
 import Header from "@/components/common/Header";
 import Sidebar from "@/components/common/Sidebar";
 import AuthSessionProvider from "@/components/provider/SessionProvider";
 import ToastContainer from "@/components/provider/ToastProvider";
-import Loading from "./(root)/loading";
 
 export const metadata: Metadata = {
   title: "Git-TASK",
