@@ -32,9 +32,14 @@ export const useTaskGroups = (
   const createBranch = useCreateBranch();
   const [isTrunkBase, setIsTrunkBase] = useState(false);
   const [canSave, setCanSave] = useState(false);
+  const [localBranches, setLocalBranches] = useState<GitHubBranch[]>(branches);
+
+  useEffect(() => {
+    setLocalBranches(branches);
+  }, [branches]);
 
   const availableBranches = useMemo(() => {
-    if (!branches || branches.length === 0) return [];
+    if (!localBranches || localBranches.length === 0) return [];
 
     const usedBranches = new Set(
       taskGroups
@@ -43,10 +48,10 @@ export const useTaskGroups = (
         .filter(branch => branch && branch !== "브랜치 선택")
     );
 
-    return branches
+    return localBranches
       .filter(branch => branch.name !== defaultBranch)
       .filter(branch => !usedBranches.has(branch.name));
-  }, [branches, taskGroups, defaultBranch]);
+  }, [localBranches, taskGroups, defaultBranch]);
 
   useEffect(() => {
     if (initialData) {
@@ -67,7 +72,7 @@ export const useTaskGroups = (
 
   useEffect(() => {
     setCanSave(true);
-  }, [isTrunkBase || false, taskGroups]);
+  }, [isTrunkBase, taskGroups]);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setForm({
@@ -162,7 +167,10 @@ export const useTaskGroups = (
       const data = await createBranch(ownerName, repoName, defaultBranch, name);
       if (data.success) {
         toast.success("브랜치 생성 성공");
+
         setForm(prev => ({ ...prev, connectedBranch: name }));
+
+        setLocalBranches(prev => [...prev, { name, protected: false }]);
       }
     } catch {
       toast.error("브랜치 생성 실패");
@@ -185,8 +193,6 @@ export const useTaskGroups = (
   };
 
   const saveData = useCallback(async () => {
-    console.log(isTrunkBase);
-
     if (!repoName || !ownerName) {
       toast.error("저장에 필요한 정보가 부족합니다.");
       return;
@@ -195,7 +201,6 @@ export const useTaskGroups = (
     if (!canSave) return;
 
     try {
-      console.log(isTrunkBase);
       const { data } = await axios.post<{ success: boolean; data: Schedule }>(
         "/api/wbs/save",
         {
