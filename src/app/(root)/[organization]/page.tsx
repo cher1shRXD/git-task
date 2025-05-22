@@ -1,6 +1,6 @@
-// import Loader from "@/components/common/Loader";
+import Loader from "@/components/common/Loader";
 import OrganizationPage from "@/components/serverPage/OrganizationPage";
-// import { Suspense } from "react";
+import { Suspense } from "react";
 
 const Organization = async ({
   params,
@@ -10,9 +10,9 @@ const Organization = async ({
   const { organization } = await params;
   
   return (
-    // <Suspense fallback={<Loader />}>
+    <Suspense fallback={<Loader />}>
       <OrganizationPage organization={organization} />
-    // </Suspense>
+    </Suspense>
   )
 }
 
