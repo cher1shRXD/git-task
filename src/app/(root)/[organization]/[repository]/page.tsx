@@ -1,5 +1,6 @@
-import RepositoryWrapper from "@/components/wrapper/RepositoryWrapper";
-
+import Loader from "@/components/common/Loader";
+import RepositoryPage from "@/components/serverPage/RepositoryPage";
+import { Suspense } from "react";
 
 const Repository = async ({
   params,
@@ -8,7 +9,11 @@ const Repository = async ({
 }) => {
   const { organization, repository } = await params;
 
-  return <RepositoryWrapper organization={organization} repository={repository} />
+  return (
+    <Suspense fallback={<Loader />}>
+      <RepositoryPage organization={organization} repository={repository} />
+    </Suspense>
+  )
 }
 
 export default Repository;

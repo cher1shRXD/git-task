@@ -1,4 +1,6 @@
-import OrganizationWrapper from "@/components/wrapper/OrganizationWrapper";
+import Loader from "@/components/common/Loader";
+import OrganizationPage from "@/components/serverPage/OrganizationPage";
+import { Suspense } from "react";
 
 const Organization = async ({
   params,
@@ -7,7 +9,11 @@ const Organization = async ({
 }) => {
   const { organization } = await params;
   
-  return <OrganizationWrapper organization={organization} />
+  return (
+    <Suspense fallback={<Loader />}>
+      <OrganizationPage organization={organization} />
+    </Suspense>
+  )
 }
 
 export default Organization
