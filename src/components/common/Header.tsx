@@ -9,7 +9,7 @@ const Header = () => {
   const { data: session, status } = useSession();
   const pathname = usePathname();
 
-  const segments = pathname.split("/").filter(Boolean);
+  const segments = pathname?.split("/").filter(Boolean) || [];
 
   return (
     <div className="w-full h-18 2xl:h-25 px-8 flex items-center justify-between">
