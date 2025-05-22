@@ -1,6 +1,6 @@
-import Loader from "@/components/common/Loader";
+// import Loader from "@/components/common/Loader";
 import RepositoryPage from "@/components/serverPage/RepositoryPage";
-import { Suspense } from "react";
+// import { Suspense } from "react";
 
 const Repository = async ({
   params,
@@ -10,9 +10,9 @@ const Repository = async ({
   const { organization, repository } = await params;
 
   return (
-    <Suspense fallback={<Loader />}>
+    // <Suspense fallback={<Loader />}>
       <RepositoryPage organization={organization} repository={repository} />
-    </Suspense>
+    // </Suspense>
   )
 }
 
