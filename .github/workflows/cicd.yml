@@ -1,14 +1,42 @@
-name: "deploy with docker compose"
+name: Build and Deploy Docker Image
+
 on:
   push:
     branches:
       - main
 
 jobs:
-  deploy:
+  build-and-push:
+    name: Build & Push Docker Image
     runs-on: ubuntu-latest
+
     steps:
-      - name: Deploy via SSH to EC2 (Docker Compose)
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Login to DockerHub
+        uses: docker/login-action@v3
+        with:
+          username: ${{ secrets.DOCKER_USERNAME }}
+          password: ${{ secrets.DOCKER_PASSWORD }}
+
+      - name: Build and push Docker image (multi-platform)
+        run: |
+          docker buildx build \
+            --platform linux/amd64,linux/arm64 \
+            -t cher1shrxd/git-task:latest \
+            --push .
+
+  deploy:
+    name: Deploy to EC2
+    needs: build-and-push
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: SSH and Deploy with Docker Compose
         uses: appleboy/ssh-action@master
         with:
           host: ${{ secrets.REMOTE_IP }}

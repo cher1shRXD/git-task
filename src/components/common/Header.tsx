@@ -1,9 +1,9 @@
 "use client";
 
-import Link from "next/link";
 import { Github, Loader } from "lucide-react";
 import { signIn, useSession } from "next-auth/react";
 import { usePathname } from "next/navigation";
+import CustomLink from "./CustomLink";
 
 const Header = () => {
   const { data: session, status } = useSession();
@@ -19,9 +19,9 @@ const Header = () => {
 
           return (
             <div key={href} className="flex items-center gap-2">
-              <Link href={href} className="hover:underline">
+              <CustomLink href={href} className="hover:underline">
                 {seg}
-              </Link>
+              </CustomLink>
               {idx !== segments.length - 1 && <span>/</span>}
             </div>
           );

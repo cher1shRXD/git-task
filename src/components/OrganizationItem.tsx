@@ -1,13 +1,13 @@
 "use client";
 
+import { useCustomRouter } from "@/hooks/useCustomRouter";
 import { GitHubOrgWithRepos } from "@/types/github/GitHubOrgWithRepos";
 import { ChevronDown, Minus } from "lucide-react";
-import { useRouter } from "next/navigation";
 import { useState } from "react";
 
 const OrganizationItem = ({ data }: { data: GitHubOrgWithRepos }) => {
   const [isOpened, setIsOpened] = useState(false);
-  const router = useRouter();
+  const router = useCustomRouter();
 
   return (
     <div className="w-full flex flex-col items-start">

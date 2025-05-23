@@ -4,7 +4,7 @@ import Image from "next/image";
 import { requestWithSession } from "@/utilities/requestWithSession";
 import { fetchGitHubUser } from "@/services/fetchGitHubUser";
 import LogoutButton from "./LogoutButton";
-import Link from "next/link";
+import CustomLink from "./CustomLink";
 
 const Sidebar = async () => {
   const { hasSession, data: orgs } = await requestWithSession(fetchOrgsWithRepos);
@@ -13,9 +13,9 @@ const Sidebar = async () => {
   if(!hasSession) {
     return (
       <div className="w-80 2xl:w-100 h-full p-3">
-        <Link href="/" className="h-25 flex items-center pl-4">
+        <CustomLink href="/" className="h-25 flex items-center pl-4">
           <Image src="/images/SymbolWithText.svg" alt="logo" width={848} height={291} className="w-40" priority />
-        </Link>
+        </CustomLink>
         <p className="text-lg font-semibold text-primary font-jetbrains">Organizations</p>
         <div className="p-2">
           <p className="text-gray-500">로그인 후 이용해주세요.</p>
@@ -26,9 +26,9 @@ const Sidebar = async () => {
 
   return (
     <div className="w-80 2xl:w-100 h-full p-3 flex flex-col gap-4">
-      <Link href="/" className="h-25 flex items-center pl-4">
+      <CustomLink href="/" className="h-25 flex items-center pl-4">
         <Image src="/images/SymbolWithText.svg" alt="logo" width={848} height={291} className="w-40" priority />
-      </Link>
+      </CustomLink>
     
       <div className="p-2 flex-1 overflow-scroll">
         <div className="w-full flex flex-col gap-4">
