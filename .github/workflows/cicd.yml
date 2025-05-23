@@ -42,17 +42,6 @@ jobs:
           -t cher1shrxd/git-task:latest \
           --push .
 
-      # .env.production 파일을 EC2로 복사
-      - name: Copy .env.production to EC2
-        uses: appleboy/scp-action@master
-        with:
-          host: ${{ secrets.REMOTE_IP }}
-          username: ${{ secrets.REMOTE_SSH_ID }}
-          key: ${{ secrets.REMOTE_SSH_KEY }}
-          port: ${{ secrets.REMOTE_SSH_PORT }}
-          source: ".env.production"
-          target: "~/git-task/.env.production"
-
       # EC2에서 docker-compose pull, down, up 실행
       - name: Deploy via SSH to EC2 (Docker Compose)
         uses: appleboy/ssh-action@master
