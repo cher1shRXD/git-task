@@ -8,7 +8,7 @@ import Header from "@/components/common/Header";
 import Sidebar from "@/components/common/Sidebar";
 import AuthSessionProvider from "@/components/provider/SessionProvider";
 import ToastContainer from "@/components/provider/ToastProvider";
-import ProgressProvider from "@/components/provider/ProgressProvider";
+import LoadingProvider from "@/components/provider/LoadingProvider";
 
 export const metadata: Metadata = {
   title: "Git-TASK",
@@ -33,7 +33,7 @@ const RootLayout = ({
         <ToastContainer />
         <QueryProvider>
           <AuthSessionProvider>
-            <ProgressProvider />
+            <LoadingProvider />
             <div className="w-full min-w-300 h-screen bg-gradient-to-r from-blue-200 to-purple-200 flex">
               <Sidebar />
               <div className="w-[calc(100%-320px)] 2xl:w-[calc(100%-400px)] h-full flex flex-col items-start justify-center">
