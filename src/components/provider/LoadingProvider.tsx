@@ -1,6 +1,5 @@
 'use client'
 
-import 'nprogress/nprogress.css'
 import { useEffect } from 'react'
 import { usePathname } from 'next/navigation'
 import { loadingStore } from '@/stores/loading'
