@@ -33,6 +33,11 @@ export const useTaskGroups = (
   const [isTrunkBase, setIsTrunkBase] = useState(false);
   const [canSave, setCanSave] = useState(false);
   const [localBranches, setLocalBranches] = useState<GitHubBranch[]>(branches);
+  const totalTaskCount = taskGroups.reduce((sum, group) => sum + group.tasks.length, 0);
+  const doneCount = taskGroups.reduce((count, group) => {
+    return count + group.tasks.filter(task => task.isDone).length;
+  }, 0);
+
 
   useEffect(() => {
     setLocalBranches(branches);
@@ -241,6 +246,8 @@ export const useTaskGroups = (
     saveData,
     isTrunkBase,
     setIsTrunkBase,
-    canSave
+    canSave,
+    totalTaskCount,
+    doneCount
   };
 };
